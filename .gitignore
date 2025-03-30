@@ -1,0 +1,14 @@
+# Qt build artifacts
+*.o
+*.obj
+*.so
+*.dll
+*.dylib
+Makefile
+moc_*
+ui_*
+qrc_*
+*.pro.user
+*.pro.user.*
+*.qmake.stash
+build/
