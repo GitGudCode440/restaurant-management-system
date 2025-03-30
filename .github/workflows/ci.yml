@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04  # Use a specific LTS version
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Qt and dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qt5-qmake qtbase5-dev g++ make
+
+      - name: Configure project with qmake
+        run: |
+          qmake RestaurantManagement.pro
+
+      - name: Build project
+        run: |
+          make -j $(nproc)
