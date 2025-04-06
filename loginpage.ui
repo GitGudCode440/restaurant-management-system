@@ -39,6 +39,7 @@ QLabel#loginSubtitle {
 
 QLineEdit {
     background-color: white;
+    color : black;
     border: 2px solid #ddd;
     border-radius: 8px;
     padding: 8px;
