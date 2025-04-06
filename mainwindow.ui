@@ -78,6 +78,32 @@ QTextEdit:hover {
     border: 2px solid darkgreen; /* Border color on hover */
     background-color: #E6FFE6; /* Light hover effect */
 }
+QComboBox {
+    border-radius: 5px;
+    padding: 7px;
+    color: white;
+    text-align: center; /* Center-align the text */
+}
+
+QComboBox:hover {
+    border-color: darkgreen;
+}
+
+QComboBox::drop-down {
+    width: 20px; /* Adjust width of the dropdown button */
+    border: none;
+}
+
+
+QComboBox QAbstractItemView {
+    color: black;
+ 
+    selection-color: black;
+    padding: 5px;
+    text-align: center;
+    outline: none; /* Remove focus border for cleaner look */
+}
+
 
 
 
@@ -158,7 +184,7 @@ QTextEdit:hover {
               <number>0</number>
              </property>
              <item alignment="Qt::AlignmentFlag::AlignHCenter">
-              <widget class="QLabel" name="label">
+              <widget class="QLabel" name="AppLogo">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                  <horstretch>0</horstretch>
@@ -555,7 +581,7 @@ QTextEdit:hover {
            </widget>
           </item>
           <item alignment="Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTop">
-           <widget class="QFrame" name="frame_4">
+           <widget class="QFrame" name="MenuBar">
             <property name="frameShape">
              <enum>QFrame::Shape::StyledPanel</enum>
             </property>
@@ -646,9 +672,9 @@ QTextEdit:hover {
         </widget>
        </item>
        <item>
-        <widget class="QStackedWidget" name="stackedWidget">
+        <widget class="QStackedWidget" name="NavigationTabs">
          <property name="currentIndex">
-          <number>4</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="Tables">
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -656,7 +682,7 @@ QTextEdit:hover {
             <widget class="QWidget" name="widget" native="true">
              <layout class="QGridLayout" name="gridLayout">
               <item row="1" column="2">
-               <widget class="QFrame" name="frame_7">
+               <widget class="QFrame" name="Table6">
                 <property name="styleSheet">
                  <string notr="true">background-color: #E8F0FE;
 border-radius: 10px;</string>
@@ -669,7 +695,7 @@ border-radius: 10px;</string>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_9">
                  <item>
-                  <widget class="QLabel" name="label_11">
+                  <widget class="QLabel" name="Table6Label">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                      <horstretch>0</horstretch>
@@ -697,7 +723,7 @@ border-radius: 10px;</string>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QComboBox" name="Table1_Status_3">
+                  <widget class="QComboBox" name="Table6_Status">
                    <property name="font">
                     <font>
                      <family>Franklin Gothic</family>
@@ -774,7 +800,7 @@ QComboBox QAbstractItemView {
                </widget>
               </item>
               <item row="1" column="0">
-               <widget class="QFrame" name="frame_5">
+               <widget class="QFrame" name="Table4">
                 <property name="styleSheet">
                  <string notr="true">background-color: #E8F0FE;
 border-radius: 10px;</string>
@@ -787,7 +813,7 @@ border-radius: 10px;</string>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_4">
                  <item>
-                  <widget class="QLabel" name="label_4">
+                  <widget class="QLabel" name="Table3Label_2">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                      <horstretch>0</horstretch>
@@ -815,7 +841,7 @@ border-radius: 10px;</string>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QComboBox" name="Table1_Status">
+                  <widget class="QComboBox" name="Table4_Status">
                    <property name="font">
                     <font>
                      <family>Franklin Gothic</family>
@@ -892,7 +918,7 @@ QComboBox QAbstractItemView {
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QFrame" name="frame_6">
+               <widget class="QFrame" name="Table5">
                 <property name="styleSheet">
                  <string notr="true">background-color: #E8F0FE;
 border-radius: 10px;</string>
@@ -905,7 +931,7 @@ border-radius: 10px;</string>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_5">
                  <item>
-                  <widget class="QLabel" name="label_10">
+                  <widget class="QLabel" name="Table5Label">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                      <horstretch>0</horstretch>
@@ -933,7 +959,7 @@ border-radius: 10px;</string>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QComboBox" name="Table1_Status_2">
+                  <widget class="QComboBox" name="Table5_Status">
                    <property name="font">
                     <font>
                      <family>Franklin Gothic</family>
@@ -1010,7 +1036,7 @@ QComboBox QAbstractItemView {
                </widget>
               </item>
               <item row="0" column="0">
-               <widget class="QFrame" name="frame_8">
+               <widget class="QFrame" name="Table1">
                 <property name="styleSheet">
                  <string notr="true">background-color: #E8F0FE;
 border-radius: 10px;</string>
@@ -1023,7 +1049,7 @@ border-radius: 10px;</string>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_10">
                  <item>
-                  <widget class="QLabel" name="label_12">
+                  <widget class="QLabel" name="Table1Label">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                      <horstretch>0</horstretch>
@@ -1051,7 +1077,7 @@ border-radius: 10px;</string>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QComboBox" name="Table1_Status_4">
+                  <widget class="QComboBox" name="Table1_Status">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -1134,7 +1160,7 @@ QComboBox QAbstractItemView {
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QFrame" name="frame_9">
+               <widget class="QFrame" name="Table2">
                 <property name="styleSheet">
                  <string notr="true">background-color: #E8F0FE;
 border-radius: 10px;</string>
@@ -1147,7 +1173,7 @@ border-radius: 10px;</string>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_12">
                  <item>
-                  <widget class="QLabel" name="label_14">
+                  <widget class="QLabel" name="Table2Label">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                      <horstretch>0</horstretch>
@@ -1175,7 +1201,7 @@ border-radius: 10px;</string>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QComboBox" name="Table1_Status_6">
+                  <widget class="QComboBox" name="Table2_Status">
                    <property name="font">
                     <font>
                      <family>Franklin Gothic</family>
@@ -1252,7 +1278,7 @@ QComboBox QAbstractItemView {
                </widget>
               </item>
               <item row="0" column="2">
-               <widget class="QFrame" name="frame_10">
+               <widget class="QFrame" name="Table3">
                 <property name="styleSheet">
                  <string notr="true">background-color: #E8F0FE;
 border-radius: 10px;</string>
@@ -1265,7 +1291,7 @@ border-radius: 10px;</string>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_13">
                  <item>
-                  <widget class="QLabel" name="label_15">
+                  <widget class="QLabel" name="Table3Label">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                      <horstretch>0</horstretch>
@@ -1293,7 +1319,7 @@ border-radius: 10px;</string>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QComboBox" name="Table1_Status_7">
+                  <widget class="QComboBox" name="Table3_Status">
                    <property name="font">
                     <font>
                      <family>Franklin Gothic</family>
@@ -1390,7 +1416,7 @@ QComboBox QAbstractItemView {
             </widget>
            </item>
            <item alignment="Qt::AlignmentFlag::AlignLeft">
-            <widget class="QWidget" name="widget_2" native="true">
+            <widget class="QWidget" name="AdditemsDialog" native="true">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                <horstretch>0</horstretch>
@@ -1419,7 +1445,7 @@ border-radius: 10px;</string>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_14">
                  <item alignment="Qt::AlignmentFlag::AlignLeft">
-                  <widget class="QLabel" name="label_5">
+                  <widget class="QLabel" name="addnewitemLabel">
                    <property name="font">
                     <font>
                      <family>Franklin Gothic</family>
@@ -1469,14 +1495,14 @@ border-radius: 10px;</string>
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLineEdit" name="lineEdit">
+                  <widget class="QLineEdit" name="ItemName">
                    <property name="placeholderText">
                     <string>Item Name</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QTextEdit" name="textEdit">
+                  <widget class="QTextEdit" name="Description">
                    <property name="maximumSize">
                     <size>
                      <width>300</width>
@@ -1510,14 +1536,14 @@ QTextEdit:hover {
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLineEdit" name="lineEdit_3">
+                  <widget class="QLineEdit" name="Price">
                    <property name="placeholderText">
                     <string>Price</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="pushButton">
+                  <widget class="QPushButton" name="AdditemBtn">
                    <property name="styleSheet">
                     <string notr="true">QPushButton {
     border-radius: 10px; /* Rounded corners */

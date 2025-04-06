@@ -17,4 +17,7 @@
         <file>Icons/minimize-sign.svg</file>
         <file>Icons/stop.svg</file>
     </qresource>
+    <qresource prefix="/images">
+        <file>images/Welcome.png</file>
+    </qresource>
 </RCC>
