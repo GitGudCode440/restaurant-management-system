@@ -42,3 +42,4 @@ void MainWindow::on_InventoryBtn_clicked()
 {
     ui->stackedWidget->setCurrentIndex(5);
 }
+

@@ -25,7 +25,9 @@ private slots:
         void on_ReservationsBtn_clicked();
          void on_InventoryBtn_clicked();
 
-private:
+
+
+    private:
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H
