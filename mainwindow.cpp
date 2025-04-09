@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     // Connect the signal to the slot
-    connect(ui->Table1_Status, &QComboBox::currentIndexChanged, this, [this](int index) {
+    connect(ui->Table1_Status, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int index) {
         QString status = ui->Table1_Status->currentText();
         setComboBoxColor(ui->Table1_Status, status);
     });
