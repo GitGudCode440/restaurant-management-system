@@ -20,4 +20,7 @@
         <file>Icons/arrow-down.svg</file>
         <file>Icons/bin.svg</file>
     </qresource>
+    <qresource prefix="/images">
+        <file>images/Welcome.png</file>
+    </qresource>
 </RCC>
