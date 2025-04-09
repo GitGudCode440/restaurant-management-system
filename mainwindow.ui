@@ -674,7 +674,7 @@ QComboBox QAbstractItemView {
        <item>
         <widget class="QStackedWidget" name="NavigationTabs">
          <property name="currentIndex">
-          <number>0</number>
+          <number>5</number>
          </property>
          <widget class="QWidget" name="Tables">
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -1742,7 +1742,7 @@ background-color: #E8F0FE;
 border-radius: 10px;</string>
              </property>
              <property name="text">
-              <string> Table Reservation</string>
+              <string>  Reservation</string>
              </property>
             </widget>
            </item>
@@ -1965,28 +1965,246 @@ QComboBox QAbstractItemView {
           </layout>
          </widget>
          <widget class="QWidget" name="Inventory">
-          <widget class="QLabel" name="label_8">
-           <property name="geometry">
-            <rect>
-             <x>20</x>
-             <y>10</y>
-             <width>679</width>
-             <height>521</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>26</pointsize>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>Usman</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignmentFlag::AlignCenter</set>
-           </property>
-          </widget>
+          <property name="styleSheet">
+           <string notr="true">
+   QWidget {
+       background-color: #fefefe;
+       font-family: 'Segoe UI';
+       font-size: 14px;
+   }
+   QLabel {
+       font-weight: 600;
+       color: #222;
+   }
+   QLineEdit, QSpinBox, QComboBox, QDateEdit, QTimeEdit {
+       padding: 6px;
+       border: 1px solid #ccc;
+       border-radius: 6px;
+       background-color: white;
+   }
+ QPushButton {
+    border-radius: 10px; /* Rounded corners */
+    color: white; /* Text color */
+    background-color: green; /* Background color */
+    font: bold 13px; /* Font style and size */
+    border: 2px solid green; /* Border color */
+}
+
+QPushButton:hover {
+    background-color: #32CD32; /* Lighter green on hover */
+    border-color: darkgreen; /* Dark green border on hover */
+}
+
+QPushButton:pressed {
+    background-color: darkgreen; /* Darker green when pressed */
+    border-color: black; /* Border changes on press */
+}
+
+  
+QTableView {
+    background-color: #E8F0FE; /* Soft white-blue background for the table */
+    border-radius: 10px; /* Rounded edges for the entire table */
+    padding: 10px; /* Adds spacing around the table */
+    border: 1px solid #B0C4DE; /* Thin border to accentuate table outline */
+    gridline-color: black; /* Adds black lines between columns and rows */
+}
+
+QTableView::item {
+    background-color: #FAFAFA; /* Gentle off-white background for cells */
+    border: 1px solid black; /* Black lines between each cell */
+    border-radius: 5px; /* Slight rounding for individual cell edges */
+    padding: 5px; /* Inner spacing for cells */
+    color: black; /* Standard text color */
+}
+
+QTableView::item:selected {
+    background-color: #D7E9F7; /* Highlighted cell with soft blue shade */
+    color: black; /* Text color remains consistent */
+    border: 1px solid black; /* Black border for selected cells */
+    border-radius: 5px;
+}
+
+QHeaderView::section {
+    background-color: #B0C4DE; /* Soft blue-gray shade for table headers */
+    padding: 10px; /* Adds spacing within header sections */
+    font-weight: bold; /* Bold text to differentiate headers */
+    color: black; /* Black text color for the headers */
+    border: 1px solid black; /* Black lines between header columns */
+  
+}
+
+QTableView::corner {
+    background-color: #B0C4DE; /* Matches header color for corner sections */
+    border-radius: 10px;
+}
+</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QLabel" name="titleLabel">
+             <property name="styleSheet">
+              <string notr="true">font: 700 22pt &quot;Leelawadee UI&quot;;
+background-color: #E8F0FE;
+border-radius: 10px;
+color: rgb(0, 0, 0);</string>
+             </property>
+             <property name="text">
+              <string> Inventory</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="inventoryTable">
+             <column>
+              <property name="text">
+               <string>Item Name</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Category</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Quantity</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Status</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+           <item>
+            <layout class="QGridLayout" name="formLayout">
+             <item row="0" column="0">
+              <widget class="QLabel" name="itemNameLabel">
+               <property name="text">
+                <string>Item Name:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="itemNameEdit"/>
+             </item>
+             <item row="0" column="2">
+              <widget class="QLabel" name="quantityLabel">
+               <property name="text">
+                <string>Quantity:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="categoryLabel">
+               <property name="text">
+                <string>Category:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="categoryEdit"/>
+             </item>
+             <item row="1" column="2">
+              <widget class="QLabel" name="statusLabel">
+               <property name="text">
+                <string>Status:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="3">
+              <widget class="QComboBox" name="statusCombo">
+               <item>
+                <property name="text">
+                 <string>In Stock</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Low Stock</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLineEdit" name="lineEdit"/>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="buttonLayout">
+             <item>
+              <widget class="QPushButton" name="addButton">
+               <property name="text">
+                <string>Add</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="updateButton">
+               <property name="text">
+                <string>Update</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="deleteButton">
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    border-radius: 10px; /* Rounded corners */
+    color: white; /* Text color */
+    background-color: red; /* Background color */
+    font: bold 13px; /* Font style and size */
+    border: 2px solid red; /* Border color */
+}
+
+QPushButton:hover {
+    background-color: #FF6347; /* Lighter red on hover */
+    border-color: darkred; /* Dark red border on hover */
+}
+
+QPushButton:pressed {
+    background-color: darkred; /* Darker red when pressed */
+    border-color: black; /* Border changes on press */
+}
+</string>
+               </property>
+               <property name="text">
+                <string>Delete</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="refreshButton">
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    border-radius: 10px; /* Rounded corners */
+    color: white; /* Text color */
+    background-color: orange; /* Background color */
+    font: bold 13px; /* Font style and size */
+    border: 2px solid orange; /* Border color */
+}
+
+QPushButton:hover {
+    background-color: #FFA500; /* Lighter orange on hover */
+    border-color: darkorange; /* Dark orange border on hover */
+}
+
+QPushButton:pressed {
+    background-color: darkorange; /* Darker orange when pressed */
+    border-color: black; /* Border changes on press */
+}
+</string>
+               </property>
+               <property name="text">
+                <string>Refresh</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
          </widget>
         </widget>
        </item>
