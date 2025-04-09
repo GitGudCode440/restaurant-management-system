@@ -734,10 +734,23 @@ QComboBox QAbstractItemView {
        <item>
         <widget class="QStackedWidget" name="NavigationTabs">
          <property name="currentIndex">
-          <number>5</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="Tables">
           <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item alignment="Qt::AlignmentFlag::AlignTop">
+            <widget class="QLabel" name="label_5">
+             <property name="styleSheet">
+              <string notr="true">font: 700 22pt &quot;Leelawadee UI&quot;;
+background-color: #E8F0FE;
+border-radius: 10px;
+color: rgb(0, 0, 0);</string>
+             </property>
+             <property name="text">
+              <string> Tables</string>
+             </property>
+            </widget>
+           </item>
            <item>
             <widget class="QWidget" name="widget" native="true">
              <layout class="QGridLayout" name="gridLayout">
@@ -1477,7 +1490,17 @@ QComboBox QAbstractItemView {
             </widget>
            </item>
            <item>
-            <widget class="QWidget" name="widget_3" native="true"/>
+            <spacer name="verticalSpacer_8">
+             <property name="orientation">
+              <enum>Qt::Orientation::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </widget>
@@ -1488,18 +1511,21 @@ QComboBox QAbstractItemView {
             <height>523</height>
            </size>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <layout class="QVBoxLayout" name="verticalLayout_22">
            <item>
-            <widget class="QWidget" name="widget_4" native="true">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
+            <widget class="QLabel" name="label_4">
+             <property name="styleSheet">
+              <string notr="true">font: 700 22pt &quot;Leelawadee UI&quot;;
+background-color: #E8F0FE;
+border-radius: 10px;
+color: rgb(0, 0, 0);</string>
+             </property>
+             <property name="text">
+              <string> Menu</string>
              </property>
             </widget>
            </item>
-           <item alignment="Qt::AlignmentFlag::AlignLeft">
+           <item alignment="Qt::AlignmentFlag::AlignRight">
             <widget class="QWidget" name="AdditemsDialog" native="true">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -1628,6 +1654,9 @@ QTextEdit:hover {
                  </item>
                  <item>
                   <widget class="QPushButton" name="AdditemBtn">
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
+                   </property>
                    <property name="styleSheet">
                     <string notr="true">QPushButton {
     border-radius: 10px; /* Rounded corners */
@@ -1651,9 +1680,6 @@ QPushButton:pressed {
                    </property>
                    <property name="text">
                     <string>Add Item</string>
-                   </property>
-                   <property name="cursor">
-                    <cursorShape>PointingHandCursor</cursorShape>
                    </property>
                   </widget>
                  </item>
@@ -1687,6 +1713,16 @@ QPushButton:pressed {
              </layout>
             </widget>
            </item>
+           <item>
+            <widget class="QWidget" name="widget_4" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
          <widget class="QWidget" name="Orders">
@@ -1700,6 +1736,19 @@ QPushButton:pressed {
            <string>border-radius: 22px;</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_19">
+           <item alignment="Qt::AlignmentFlag::AlignTop">
+            <widget class="QLabel" name="Orderslabel">
+             <property name="styleSheet">
+              <string notr="true">font: 700 22pt &quot;Leelawadee UI&quot;;
+background-color: #E8F0FE;
+border-radius: 10px;
+color: rgb(0, 0, 0);</string>
+             </property>
+             <property name="text">
+              <string> Orders</string>
+             </property>
+            </widget>
+           </item>
            <item>
             <layout class="QVBoxLayout" name="OrderListLayout"/>
            </item>
@@ -1719,8 +1768,21 @@ QPushButton:pressed {
           </layout>
          </widget>
          <widget class="QWidget" name="Billing">
-          <layout class="QHBoxLayout" name="horizontalLayout_13">
+          <layout class="QVBoxLayout" name="verticalLayout_21">
            <item>
+            <widget class="QLabel" name="label">
+             <property name="styleSheet">
+              <string notr="true">font: 700 22pt &quot;Leelawadee UI&quot;;
+background-color: #E8F0FE;
+border-radius: 10px;
+color: rgb(0, 0, 0);</string>
+             </property>
+             <property name="text">
+              <string> Billing</string>
+             </property>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignmentFlag::AlignLeft">
             <widget class="QWidget" name="BillingPanel" native="true">
              <property name="sizePolicy">
               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -1776,7 +1838,7 @@ border-radius: 10px;</string>
                  </font>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">color: black;</string>
+                 <string notr="true">color: rgb(0, 0, 0);</string>
                 </property>
                 <property name="text">
                  <string>Billing Panel</string>
@@ -2306,27 +2368,32 @@ border-radius: 10px;</string>
              </property>
              <column>
               <property name="text">
+               <string>Name</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
                <string>Table No.</string>
               </property>
              </column>
              <column>
               <property name="text">
-               <string>Capacity</string>
+               <string>Date</string>
               </property>
              </column>
              <column>
               <property name="text">
-               <string>Location</string>
+               <string>Time</string>
               </property>
              </column>
              <column>
               <property name="text">
-               <string>Sanctory</string>
+               <string>Guests</string>
               </property>
              </column>
              <column>
               <property name="text">
-               <string>Status</string>
+               <string>Contact</string>
               </property>
              </column>
             </widget>
