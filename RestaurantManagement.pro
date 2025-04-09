@@ -11,15 +11,18 @@ CONFIG += c++20
 SOURCES += \
     loginpage.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    ordercard.cpp
 
 HEADERS += \
     loginpage.h \
-    mainwindow.h
+    mainwindow.h \
+    ordercard.h
 
 FORMS += \
     loginpage.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    ordercard.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

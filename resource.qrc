@@ -17,5 +17,7 @@
         <file>Icons/minimize-sign.svg</file>
         <file>Icons/stop.svg</file>
         <file>Icons/arrow_right.svg</file>
+        <file>Icons/arrow-down.svg</file>
+        <file>Icons/bin.svg</file>
     </qresource>
 </RCC>
