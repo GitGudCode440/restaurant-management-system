@@ -744,7 +744,8 @@ QComboBox QAbstractItemView {
               <string notr="true">font: 700 22pt &quot;Leelawadee UI&quot;;
 background-color: #E8F0FE;
 border-radius: 10px;
-color: rgb(0, 0, 0);</string>
+color: rgb(0, 0, 0);
+padding: 5px;</string>
              </property>
              <property name="text">
               <string> Tables</string>
@@ -1518,7 +1519,8 @@ QComboBox QAbstractItemView {
               <string notr="true">font: 700 22pt &quot;Leelawadee UI&quot;;
 background-color: #E8F0FE;
 border-radius: 10px;
-color: rgb(0, 0, 0);</string>
+color: rgb(0, 0, 0);
+padding: 5px;</string>
              </property>
              <property name="text">
               <string> Menu</string>
@@ -1742,7 +1744,8 @@ QPushButton:pressed {
               <string notr="true">font: 700 22pt &quot;Leelawadee UI&quot;;
 background-color: #E8F0FE;
 border-radius: 10px;
-color: rgb(0, 0, 0);</string>
+color: rgb(0, 0, 0);
+padding: 5px;</string>
              </property>
              <property name="text">
               <string> Orders</string>
@@ -1775,7 +1778,8 @@ color: rgb(0, 0, 0);</string>
               <string notr="true">font: 700 22pt &quot;Leelawadee UI&quot;;
 background-color: #E8F0FE;
 border-radius: 10px;
-color: rgb(0, 0, 0);</string>
+color: rgb(0, 0, 0);
+padding: 5px;</string>
              </property>
              <property name="text">
               <string> Billing</string>
@@ -2280,7 +2284,9 @@ QTableView::corner {
              <property name="styleSheet">
               <string notr="true">font: 700 22pt &quot;Leelawadee UI&quot;;
 background-color: #E8F0FE;
-border-radius: 10px;</string>
+border-radius: 10px;
+color: rgb(0, 0, 0);
+padding: 5px;</string>
              </property>
              <property name="text">
               <string>  Reservation</string>
@@ -2592,7 +2598,8 @@ QTableView::corner {
               <string notr="true">font: 700 22pt &quot;Leelawadee UI&quot;;
 background-color: #E8F0FE;
 border-radius: 10px;
-color: rgb(0, 0, 0);</string>
+color: rgb(0, 0, 0);
+padding: 5px;</string>
              </property>
              <property name="text">
               <string> Inventory</string>
