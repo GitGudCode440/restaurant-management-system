@@ -734,7 +734,7 @@ QComboBox QAbstractItemView {
        <item>
         <widget class="QStackedWidget" name="NavigationTabs">
          <property name="currentIndex">
-          <number>0</number>
+          <number>5</number>
          </property>
          <widget class="QWidget" name="Tables">
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -757,6 +757,12 @@ padding: 5px;</string>
              <layout class="QGridLayout" name="gridLayout">
               <item row="1" column="2">
                <widget class="QFrame" name="Table6">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>120</height>
+                 </size>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">background-color: #E8F0FE;
 border-radius: 10px;</string>
@@ -878,6 +884,12 @@ QComboBox QAbstractItemView {
               </item>
               <item row="1" column="0">
                <widget class="QFrame" name="Table4">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>120</height>
+                 </size>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">background-color: #E8F0FE;
 border-radius: 10px;</string>
@@ -999,6 +1011,12 @@ QComboBox QAbstractItemView {
               </item>
               <item row="1" column="1">
                <widget class="QFrame" name="Table5">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>120</height>
+                 </size>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">background-color: #E8F0FE;
 border-radius: 10px;</string>
@@ -1120,6 +1138,12 @@ QComboBox QAbstractItemView {
               </item>
               <item row="0" column="0">
                <widget class="QFrame" name="Table1">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>120</height>
+                 </size>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">background-color: #E8F0FE;
 border-radius: 10px;</string>
@@ -1247,6 +1271,12 @@ QComboBox QAbstractItemView {
               </item>
               <item row="0" column="1">
                <widget class="QFrame" name="Table2">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>120</height>
+                 </size>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">background-color: #E8F0FE;
 border-radius: 10px;</string>
@@ -1368,6 +1398,12 @@ QComboBox QAbstractItemView {
               </item>
               <item row="0" column="2">
                <widget class="QFrame" name="Table3">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>120</height>
+                 </size>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">background-color: #E8F0FE;
 border-radius: 10px;</string>
@@ -2196,6 +2232,12 @@ QPushButton:pressed {
           </layout>
          </widget>
          <widget class="QWidget" name="Reservations">
+          <property name="font">
+           <font>
+            <family>Segoe UI</family>
+            <pointsize>-1</pointsize>
+           </font>
+          </property>
           <property name="styleSheet">
            <string notr="true">
    QWidget {
@@ -2304,13 +2346,20 @@ padding: 5px;</string>
              </item>
              <item>
               <widget class="QDateEdit" name="dateEdit_date">
+               <property name="styleSheet">
+                <string notr="true">color: black;</string>
+               </property>
                <property name="calendarPopup">
                 <bool>true</bool>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QTimeEdit" name="timeEdit_time"/>
+              <widget class="QTimeEdit" name="timeEdit_time">
+               <property name="styleSheet">
+                <string notr="true">color: black;</string>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -2335,8 +2384,15 @@ border-radius: 10px;</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
-              <widget class="QLineEdit" name="lineEdit_name"/>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_guests1">
+               <property name="text">
+                <string>Guests:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLineEdit" name="lineEdit_3"/>
              </item>
              <item row="0" column="2">
               <widget class="QLabel" name="label_contact">
@@ -2345,23 +2401,28 @@ border-radius: 10px;</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="3">
-              <widget class="QLineEdit" name="lineEdit_contact"/>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_guests1">
-               <property name="text">
-                <string>Guests:</string>
-               </property>
-              </widget>
-             </item>
              <item row="1" column="1">
               <widget class="QSpinBox" name="spinBox_guests">
+               <property name="styleSheet">
+                <string notr="true">color: black;</string>
+               </property>
                <property name="minimum">
                 <number>1</number>
                </property>
                <property name="maximum">
                 <number>20</number>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="lineEdit_2">
+               <property name="font">
+                <font>
+                 <family>Segoe UI</family>
+                 <pointsize>-1</pointsize>
+                 <italic>false</italic>
+                 <bold>true</bold>
+                </font>
                </property>
               </widget>
              </item>
@@ -2668,6 +2729,9 @@ padding: 5px;</string>
              </item>
              <item row="1" column="3">
               <widget class="QComboBox" name="statusCombo">
+               <property name="styleSheet">
+                <string notr="true">color: black;</string>
+               </property>
                <item>
                 <property name="text">
                  <string>In Stock</string>
