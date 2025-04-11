@@ -7,6 +7,7 @@
 #include <QDateTime>
 #include "ordercard.h"
 #include <QComboBox>
+#include <QList>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -38,10 +39,14 @@ private slots:
     void on_FoodFinalizeBtn_clicked();
 
 
+    void on_btn_reserve_clicked();
+
 private:
     Ui::MainWindow *ui;
     void addOrderCards(OrderCard* card);
     void addOrder(OrderCard* card);
+
+    int currentRow = 0;
 
 };
 #endif // MAINWINDOW_H
