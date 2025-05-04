@@ -15,6 +15,29 @@ MainWindow::MainWindow(QWidget *parent)
         setComboBoxColor(ui->Table1_Status, status);
     });
 
+    // Initialize combo boxes and line edits
+    Table1_Status = ui->Table1_Status;
+    Table2_Status = ui->Table2_Status;
+    Table3_Status = ui->Table3_Status;
+    Table4_Status = ui->Table4_Status;
+    Table5_Status = ui->Table5_Status;
+    Table6_Status = ui->Table6_Status;
+
+    availableCount = ui->availableCount;
+    occupiedCount = ui->occupiedCount;
+    reservedCount = ui->reservedCount;
+
+    // Connect the combo box changes to the update function
+    connect(Table1_Status, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTableStatusCounts()));
+    connect(Table2_Status, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTableStatusCounts()));
+    connect(Table3_Status, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTableStatusCounts()));
+    connect(Table4_Status, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTableStatusCounts()));
+    connect(Table5_Status, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTableStatusCounts()));
+    connect(Table6_Status, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTableStatusCounts()));
+
+    // Initialize the count display
+    updateTableStatusCounts();
+
 }
 
 MainWindow::~MainWindow()
@@ -130,6 +153,7 @@ void MainWindow::setComboBoxColor(QComboBox *comboBox, const QString &status)
     }
 }
 
+<<<<<<< HEAD
 
 void MainWindow::on_btn_reserve_clicked()
 {
@@ -160,5 +184,76 @@ void MainWindow::on_btn_reserve_clicked()
     }
 
     currentRow++;
+=======
+void MainWindow::on_addButton_clicked()
+{
+    // Get references to your input fields
+    QLineEdit* itemNameEdit = ui->itemNameEdit;
+    QLineEdit* categoryEdit = ui->categoryEdit;
+    QLineEdit* quantityEdit = ui->quantityEdit;
+    QComboBox* statusCombo = ui->statusCombo;
+    QTableWidget* table = ui->inventoryTable;
+
+    // Create new items for the table
+    QTableWidgetItem* tableItem;
+
+    // Add a new row
+    int currentRow = table->rowCount();
+    table->insertRow(currentRow);
+
+    // Fill in the cells
+    for (int i = 0; i < 4; i++) {
+        switch(i) {
+        case 0: tableItem = new QTableWidgetItem(itemNameEdit->text()); break;
+        case 1: tableItem = new QTableWidgetItem(categoryEdit->text()); break;
+        case 2: tableItem = new QTableWidgetItem(quantityEdit->text()); break;
+        case 3: tableItem = new QTableWidgetItem(statusCombo->currentText()); break;
+        }
+        table->setItem(currentRow, i, tableItem);
+    }
+
+    // Clear input fields after adding
+    itemNameEdit->clear();
+    categoryEdit->clear();
+    quantityEdit->clear();
+    statusCombo->setCurrentIndex(0); // Reset to default value
+}
+
+void MainWindow::updateTableStatusCounts()
+{
+    int available = 0;
+    int occupied = 0;
+    int reserved = 0;
+
+    // Check the status of each table and update counts
+    if (Table1_Status->currentText() == "Available") available++;
+    if (Table1_Status->currentText() == "Occupied") occupied++;
+    if (Table1_Status->currentText() == "Reserved") reserved++;
+
+    if (Table2_Status->currentText() == "Available") available++;
+    if (Table2_Status->currentText() == "Occupied") occupied++;
+    if (Table2_Status->currentText() == "Reserved") reserved++;
+
+    if (Table3_Status->currentText() == "Available") available++;
+    if (Table3_Status->currentText() == "Occupied") occupied++;
+    if (Table3_Status->currentText() == "Reserved") reserved++;
+
+    if (Table4_Status->currentText() == "Available") available++;
+    if (Table4_Status->currentText() == "Occupied") occupied++;
+    if (Table4_Status->currentText() == "Reserved") reserved++;
+
+    if (Table5_Status->currentText() == "Available") available++;
+    if (Table5_Status->currentText() == "Occupied") occupied++;
+    if (Table5_Status->currentText() == "Reserved") reserved++;
+
+    if (Table6_Status->currentText() == "Available") available++;
+    if (Table6_Status->currentText() == "Occupied") occupied++;
+    if (Table6_Status->currentText() == "Reserved") reserved++;
+
+    // Update the line edits with the new counts
+    availableCount->setText(QString::number(available));
+    occupiedCount->setText(QString::number(occupied));
+    reservedCount->setText(QString::number(reserved));
+>>>>>>> 468b56b (Added Logo + Functional Inventory + Tables status)
 }
 

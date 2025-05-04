@@ -37,6 +37,8 @@ private slots:
     void on_InventoryBtn_clicked();
     void on_FoodAddBtn_clicked();
     void on_FoodFinalizeBtn_clicked();
+    void updateTableStatusCounts();
+    void on_addButton_clicked();
 
 
     void on_btn_reserve_clicked();
@@ -45,6 +47,9 @@ private:
     Ui::MainWindow *ui;
     void addOrderCards(OrderCard* card);
     void addOrder(OrderCard* card);
+    int currentRow = 0;
+    QComboBox *Table1_Status, *Table2_Status, *Table3_Status, *Table4_Status, *Table5_Status, *Table6_Status;
+    QLineEdit *availableCount, *occupiedCount, *reservedCount;
 
     int currentRow = 0;
 

@@ -102,12 +102,7 @@ QComboBox QAbstractItemView {
     padding: 5px;
     text-align: center;
     outline: none; /* Remove focus border for cleaner look */
-}
-
-
-
-
-</string>
+}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QFormLayout" name="formLayout">
@@ -178,40 +173,18 @@ QComboBox QAbstractItemView {
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>65</width>
-                 <height>60</height>
+                 <width>150</width>
+                 <height>140</height>
                 </size>
                </property>
                <property name="text">
                 <string/>
                </property>
                <property name="pixmap">
-                <pixmap resource="resource.qrc">:/icons/Icons/restaurant-cutlery-circular-symbol-of-a-spoon-and-a-fork-in-a-circle.svg</pixmap>
+                <pixmap resource="resource.qrc">:/images/images/RestaurantLogo.png</pixmap>
                </property>
                <property name="scaledContents">
                 <bool>true</bool>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="AppTitle">
-               <property name="styleSheet">
-                <string notr="true">QLabel {
-    font-size: 15px;           /* Large font size for the title */
-    font-weight: bold;         /* Bold text for emphasis */
-    color:#010101;            /* A fresh black color for the title */
-    background: transparent;   /* No background for a clean look */
-    text-align: center;        /* Centered alignment */
-    padding: 10px 0;           /* Padding for spacing */
-    border-radius: 8px;        /* Rounded corners */
-}
-</string>
-               </property>
-               <property name="text">
-                <string>RestaurantApp</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -1538,6 +1511,192 @@ QComboBox QAbstractItemView {
              </property>
             </spacer>
            </item>
+           <item>
+            <layout class="QHBoxLayout" name="tableStatusCount">
+             <item>
+              <spacer name="horizontalSpacer_3">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item alignment="Qt::AlignmentFlag::AlignRight">
+              <widget class="QLabel" name="availableLabel">
+               <property name="font">
+                <font>
+                 <pointsize>12</pointsize>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Available :</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="availableCount">
+               <property name="minimumSize">
+                <size>
+                 <width>60</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>60</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>Segoe UI</family>
+                 <pointsize>14</pointsize>
+                 <italic>false</italic>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLineEdit {
+                  border: 2px solid #a0a0a0;
+                  border-radius: 6px;
+                  background-color: #ffffff;
+                  padding: 2px;
+                                  font: 700 14pt &quot;Segoe UI&quot;;
+              }</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item alignment="Qt::AlignmentFlag::AlignRight">
+              <widget class="QLabel" name="occupiedLabel">
+               <property name="font">
+                <font>
+                 <pointsize>12</pointsize>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Occupied :</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="occupiedCount">
+               <property name="minimumSize">
+                <size>
+                 <width>60</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>60</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>Segoe UI</family>
+                 <pointsize>14</pointsize>
+                 <italic>false</italic>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLineEdit {
+                  border: 2px solid #a0a0a0;
+                  border-radius: 6px;
+                  background-color: #ffffff;
+                  padding: 2px;
+                               font: 700 14pt &quot;Segoe UI&quot;;
+              }</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item alignment="Qt::AlignmentFlag::AlignRight">
+              <widget class="QLabel" name="reservedLabel">
+               <property name="font">
+                <font>
+                 <pointsize>12</pointsize>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Reserved :</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="reservedCount">
+               <property name="minimumSize">
+                <size>
+                 <width>60</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>60</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>Segoe UI</family>
+                 <pointsize>14</pointsize>
+                 <italic>false</italic>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLineEdit {
+                  border: 2px solid #a0a0a0;
+                  border-radius: 6px;
+                  background-color: #ffffff;
+                  padding: 2px;
+                                 font: 700 14pt &quot;Segoe UI&quot;;
+              }</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
           </layout>
          </widget>
          <widget class="QWidget" name="Menu">
@@ -2759,7 +2918,7 @@ padding: 5px;</string>
               </widget>
              </item>
              <item row="0" column="3">
-              <widget class="QLineEdit" name="lineEdit"/>
+              <widget class="QLineEdit" name="quantityEdit"/>
              </item>
             </layout>
            </item>
