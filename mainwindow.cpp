@@ -153,7 +153,7 @@ void MainWindow::setComboBoxColor(QComboBox *comboBox, const QString &status)
     }
 }
 
-<<<<<<< HEAD
+//<<<<<<< HEAD
 
 void MainWindow::on_btn_reserve_clicked()
 {
@@ -184,7 +184,8 @@ void MainWindow::on_btn_reserve_clicked()
     }
 
     currentRow++;
-=======
+}
+//=======
 void MainWindow::on_addButton_clicked()
 {
     // Get references to your input fields
@@ -254,6 +255,6 @@ void MainWindow::updateTableStatusCounts()
     availableCount->setText(QString::number(available));
     occupiedCount->setText(QString::number(occupied));
     reservedCount->setText(QString::number(reserved));
->>>>>>> 468b56b (Added Logo + Functional Inventory + Tables status)
+//>>>>>>> 468b56b (Added Logo + Functional Inventory + Tables status)
 }
 

@@ -51,7 +51,5 @@ private:
     QComboBox *Table1_Status, *Table2_Status, *Table3_Status, *Table4_Status, *Table5_Status, *Table6_Status;
     QLineEdit *availableCount, *occupiedCount, *reservedCount;
 
-    int currentRow = 0;
-
 };
 #endif // MAINWINDOW_H
