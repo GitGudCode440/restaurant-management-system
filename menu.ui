@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Menu</class>
+ <widget class="QWidget" name="Menu">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>623</width>
+    <height>459</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="label_4">
+     <property name="styleSheet">
+      <string notr="true">font: 700 22pt &quot;Leelawadee UI&quot;;
+background-color: #E8F0FE;
+border-radius: 10px;
+color: rgb(0, 0, 0);
+padding: 5px;</string>
+     </property>
+     <property name="text">
+      <string> Menu</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="AdditemsDialog" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::LayoutDirection::RightToLeft</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: #E8F0FE;
+border-radius: 10px;</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_11">
+      <item alignment="Qt::AlignmentFlag::AlignTop">
+       <widget class="QFrame" name="frame_11">
+        <property name="font">
+         <font>
+          <family>Tahoma</family>
+          <pointsize>14</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::LayoutDirection::LeftToRight</enum>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Shape::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_14">
+         <item alignment="Qt::AlignmentFlag::AlignLeft">
+          <widget class="QLabel" name="addnewitemLabel">
+           <property name="font">
+            <font>
+             <family>Franklin Gothic</family>
+             <pointsize>16</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(0, 0, 0);</string>
+           </property>
+           <property name="text">
+            <string>Add New Item</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="frame_12">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Shape::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_15">
+         <property name="spacing">
+          <number>14</number>
+         </property>
+         <property name="leftMargin">
+          <number>9</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>9</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLineEdit" name="ItemName">
+           <property name="placeholderText">
+            <string>Item Name</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTextEdit" name="Description">
+           <property name="maximumSize">
+            <size>
+             <width>300</width>
+             <height>60</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QTextEdit {
+    border: 2px solid green; /* Border color */
+    border-radius: 10px; /* Rounded corners */
+    padding: 5px; /* Internal padding for text */
+    background-color: white; /* Background color */
+    color: black; /* Text color */
+    font: bold 12px; /* Font style and size */
+}
+
+QTextEdit:focus {
+    border: 2px solid #32CD32; /* Bright green border on focus */
+    background-color: #F0FFF0; /* Light greenish background */
+}
+
+QTextEdit:hover {
+    border: 2px solid darkgreen; /* Border color on hover */
+    background-color: #E6FFE6; /* Light hover effect */
+}
+</string>
+           </property>
+           <property name="placeholderText">
+            <string>Description</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="Price">
+           <property name="placeholderText">
+            <string>Price</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="AdditemBtn">
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+    border-radius: 10px; /* Rounded corners */
+    padding: 7px; /* Internal padding */
+    color: white; /* Text color */
+    background-color: green; /* Background color */
+    font: bold 12px; /* Font style and size */
+    border: 2px solid green; /* Border color */
+}
+
+QPushButton:hover {
+    background-color: #32CD32; /* Lighter green on hover */
+    border-color: darkgreen; /* Dark green border on hover */
+}
+
+QPushButton:pressed {
+    background-color: darkgreen; /* Darker green when pressed */
+    border-color: black; /* Border changes on press */
+}
+</string>
+           </property>
+           <property name="text">
+            <string>Add Item</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item alignment="Qt::AlignmentFlag::AlignBottom">
+       <widget class="QFrame" name="frame_13">
+        <property name="frameShape">
+         <enum>QFrame::Shape::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_16"/>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="widget_4" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

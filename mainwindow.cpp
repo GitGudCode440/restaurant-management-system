@@ -1,19 +1,27 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "loginpage.h"
+#include <iostream>
 
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , db(QSqlDatabase::addDatabase("QMYSQL"))
 {
     ui->setupUi(this);
 
-    // Connect the signal to the slot
-    connect(ui->Table1_Status, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int index) {
-        QString status = ui->Table1_Status->currentText();
-        setComboBoxColor(ui->Table1_Status, status);
-    });
+    db.setHostName("127.0.0.1");
+    db.setPort(3306);
+    db.setDatabaseName("restaurant_db");
+    db.setUserName("root");
+    db.setPassword("12345");
+
+    if (!db.open()) {
+        QMessageBox::critical(this, "Database Error", "Unable to connect to database");
+    }
+
+    connect(ui->BillingPage, &Billing::addOrder, this, &MainWindow::addOrder);
 
 }
 
@@ -52,9 +60,6 @@ void MainWindow::on_InventoryBtn_clicked()
     ui->NavigationTabs->setCurrentIndex(5);
 }
 
-void MainWindow::addOrderCards(OrderCard* card) {
-    ui->OrderListLayout->addWidget(card);
-}
 
 void MainWindow::addOrder(OrderCard* card) {
 
@@ -62,103 +67,14 @@ void MainWindow::addOrder(OrderCard* card) {
                           .arg(QDateTime::currentMSecsSinceEpoch())
                           .arg(QUuid::createUuid().toString(QUuid::WithoutBraces));
     card->changeOrderLabelText(orderId);
-    addOrderCards(card);
-}
-
-void MainWindow::on_FoodAddBtn_clicked()
-{
-    QComboBox* foodItemSelect = ui->FoodItemSelect;
-    QComboBox* foodQuantitySelect = ui->FoodQuantitySelect;
-
-    ui->FoodListWidget->addItem(
-        QString("%1 %2")
-            .arg(foodQuantitySelect->currentText(), foodItemSelect->currentText())
-    );
-}
-
-
-void MainWindow::on_FoodFinalizeBtn_clicked()
-{
-    QListWidget* listWidget = ui->FoodListWidget;
-    QComboBox* deliverySelect = ui->DeliveryTypeSelect;
-
-    OrderCard* card = new OrderCard;
-    OrderType type;
-
-    if (deliverySelect->currentIndex() >= 0 && deliverySelect->currentIndex() <= 2) {
-        type = static_cast<OrderType>(deliverySelect->currentIndex());
-    }
-    else type = OrderType::INVALID;
-
-    card->changeOrderType(type);
-
-    int count = listWidget->count();
-    for (int i = 0; i < count; ++i) {
-        QListWidgetItem *item = listWidget->item(i);
-        if (item) {
-            card->addTextToListWidget(item->text());
-        }
-    }
-
-    addOrder(card);
-
-    listWidget->clear();
-
+    ui->OrdersPage->addWidgetToOrderList(card);
 }
 
 
 void MainWindow::on_LogoutBtn_clicked()
 {
-    // Create a new instance of loginpage
     loginpage *login = new loginpage();
     login->show();
 
-    // Close the main window
     this->close();
 }
-
-void MainWindow::setComboBoxColor(QComboBox *comboBox, const QString &status)
-{
-    if (status == "Available") {
-        comboBox->setStyleSheet("QComboBox { background-color: green;  }");
-    } else if (status == "Occupied") {
-        comboBox->setStyleSheet("QComboBox { background-color: red; ");
-    } else if (status == "Reserved") {
-        comboBox->setStyleSheet("QComboBox { background-color: orange; ");
-    } else {
-        comboBox->setStyleSheet(""); // Reset to default
-    }
-}
-
-
-void MainWindow::on_btn_reserve_clicked()
-{
-
-    QDateEdit* dateEdit = ui->dateEdit_date;
-    QTimeEdit* timeEdit = ui->timeEdit_time;
-    QLineEdit* reservationName = ui->reservation_name;
-    QLineEdit* reservationContact = ui->reservation_contact;
-    QSpinBox* spinBox = ui->spinBox_guests;
-    QComboBox* tableNo = ui->comboBox_selectTable;
-
-    QTableWidget* table = ui->tableWidget_tables;
-    QTableWidgetItem* tableItem;
-
-    table->insertRow(currentRow);
-
-    for (int i = 0; i < 6; i++) {
-        switch(i) {
-        case 0: tableItem = new QTableWidgetItem(reservationName->text()); break;
-        case 1: tableItem = new QTableWidgetItem(tableNo->currentText()); break;
-        case 2: tableItem = new QTableWidgetItem(dateEdit->text()); break;
-        case 3: tableItem = new QTableWidgetItem(timeEdit->text()); break;
-        case 4: tableItem = new QTableWidgetItem(spinBox->text()); break;
-        case 5: tableItem = new QTableWidgetItem(reservationContact->text()); break;
-        }
-
-        table->setItem(currentRow, i, tableItem);
-    }
-
-    currentRow++;
-}
-

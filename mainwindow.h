@@ -5,9 +5,13 @@
 #include <QVector>
 #include <QUuid>
 #include <QDateTime>
-#include "ordercard.h"
 #include <QComboBox>
 #include <QList>
+#include <QSqlDatabase>
+#include <QMessageBox>
+
+#include "ordercard.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -27,7 +31,6 @@ public:
 
 
 private slots:
-    void setComboBoxColor(QComboBox *comboBox, const QString &status);
     void on_LogoutBtn_clicked();
     void on_TablesBtn_clicked();
     void on_MenuBtn_clicked();
@@ -35,16 +38,13 @@ private slots:
     void on_BillingBtn_clicked();
     void on_ReservationsBtn_clicked();
     void on_InventoryBtn_clicked();
-    void on_FoodAddBtn_clicked();
-    void on_FoodFinalizeBtn_clicked();
 
+    void addOrder(OrderCard* card);
 
-    void on_btn_reserve_clicked();
 
 private:
     Ui::MainWindow *ui;
-    void addOrderCards(OrderCard* card);
-    void addOrder(OrderCard* card);
+    QSqlDatabase db;
 
     int currentRow = 0;
 

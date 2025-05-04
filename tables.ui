@@ -1,0 +1,822 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Tables</class>
+ <widget class="QWidget" name="Tables">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>710</width>
+    <height>413</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="label_5">
+     <property name="styleSheet">
+      <string notr="true">font: 700 22pt &quot;Leelawadee UI&quot;;
+background-color: #E8F0FE;
+border-radius: 10px;
+color: rgb(0, 0, 0);
+padding: 5px;</string>
+     </property>
+     <property name="text">
+      <string> Tables</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="TableGrid" native="true">
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="1" column="2">
+       <widget class="QFrame" name="Table6">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>120</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: #E8F0FE;
+border-radius: 10px;</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Shape::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_9">
+         <item>
+          <widget class="QLabel" name="Table6Label">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <family>Franklin Gothic Medium</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(0, 0, 0);</string>
+           </property>
+           <property name="text">
+            <string>Table 6</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="Table6_Status">
+           <property name="font">
+            <font>
+             <family>Franklin Gothic Medium</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LayoutDirection::LeftToRight</enum>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QComboBox {
+    border-radius: 5px;
+    padding: 7px;
+    color: white;
+    background-color: green;
+    text-align: center; /* Center-align the text */
+}
+
+QComboBox:hover {
+    border-color: darkgreen;
+    background-color: #32CD32; /* Lighter green for hover effect */
+}
+
+QComboBox::drop-down {
+    width: 20px; /* Adjust width of the dropdown button */
+    border: none;
+}
+
+
+QComboBox QAbstractItemView {
+    background-color: white;
+    color: black;
+    selection-background-color: #32CD32; /* Highlight selected item in green */
+    selection-color: black;
+    padding: 5px;
+    text-align: center;
+    outline: none; /* Remove focus border for cleaner look */
+}
+</string>
+           </property>
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="placeholderText">
+            <string>Change Status</string>
+           </property>
+           <property name="frame">
+            <bool>true</bool>
+           </property>
+           <item>
+            <property name="text">
+             <string>Available</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Occupied</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Reserved</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QFrame" name="Table4">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>120</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: #E8F0FE;
+border-radius: 10px;</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Shape::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QLabel" name="Table3Label_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <family>Franklin Gothic Medium</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(0, 0, 0);</string>
+           </property>
+           <property name="text">
+            <string>Table 4</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="Table4_Status">
+           <property name="font">
+            <font>
+             <family>Franklin Gothic Medium</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LayoutDirection::LeftToRight</enum>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QComboBox {
+    border-radius: 5px;
+    padding: 7px;
+    color: white;
+    background-color: green;
+    text-align: center; /* Center-align the text */
+}
+
+QComboBox:hover {
+    border-color: darkgreen;
+    background-color: #32CD32; /* Lighter green for hover effect */
+}
+
+QComboBox::drop-down {
+    width: 20px; /* Adjust width of the dropdown button */
+    border: none;
+}
+
+
+QComboBox QAbstractItemView {
+    background-color: white;
+    color: black;
+    selection-background-color: #32CD32; /* Highlight selected item in green */
+    selection-color: black;
+    padding: 5px;
+    text-align: center;
+    outline: none; /* Remove focus border for cleaner look */
+}
+</string>
+           </property>
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="placeholderText">
+            <string>Change Status</string>
+           </property>
+           <property name="frame">
+            <bool>true</bool>
+           </property>
+           <item>
+            <property name="text">
+             <string>Available</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Occupied</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Reserved</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QFrame" name="Table5">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>120</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: #E8F0FE;
+border-radius: 10px;</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Shape::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <widget class="QLabel" name="Table5Label">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <family>Franklin Gothic Medium</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(0, 0, 0);</string>
+           </property>
+           <property name="text">
+            <string>Table 5</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="Table5_Status">
+           <property name="font">
+            <font>
+             <family>Franklin Gothic Medium</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LayoutDirection::LeftToRight</enum>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QComboBox {
+    border-radius: 5px;
+    padding: 7px;
+    color: white;
+    background-color: green;
+    text-align: center; /* Center-align the text */
+}
+
+QComboBox:hover {
+    border-color: darkgreen;
+    background-color: #32CD32; /* Lighter green for hover effect */
+}
+
+QComboBox::drop-down {
+    width: 20px; /* Adjust width of the dropdown button */
+    border: none;
+}
+
+
+QComboBox QAbstractItemView {
+    background-color: white;
+    color: black;
+    selection-background-color: #32CD32; /* Highlight selected item in green */
+    selection-color: black;
+    padding: 5px;
+    text-align: center;
+    outline: none; /* Remove focus border for cleaner look */
+}
+</string>
+           </property>
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="placeholderText">
+            <string>Change Status</string>
+           </property>
+           <property name="frame">
+            <bool>true</bool>
+           </property>
+           <item>
+            <property name="text">
+             <string>Available</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Occupied</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Reserved</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QFrame" name="Table1">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>120</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: #E8F0FE;
+border-radius: 10px;</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Shape::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_10">
+         <item>
+          <widget class="QLabel" name="Table1Label">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <family>Franklin Gothic Medium</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(0, 0, 0);</string>
+           </property>
+           <property name="text">
+            <string>Table 1</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="Table1_Status">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <family>Franklin Gothic Medium</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LayoutDirection::LeftToRight</enum>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QComboBox {
+    border-radius: 5px;
+    padding: 7px;
+    color: white;
+    background-color: green;
+    text-align: center; /* Center-align the text */
+}
+
+QComboBox:hover {
+    border-color: darkgreen;
+    background-color: #32CD32; /* Lighter green for hover effect */
+}
+
+QComboBox::drop-down {
+    width: 20px; /* Adjust width of the dropdown button */
+    border: none;
+}
+
+
+QComboBox QAbstractItemView {
+    background-color: white;
+    color: black;
+    selection-background-color: #32CD32; /* Highlight selected item in green */
+    selection-color: black;
+    padding: 5px;
+    text-align: center;
+    outline: none; /* Remove focus border for cleaner look */
+}
+</string>
+           </property>
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="placeholderText">
+            <string>Change Status</string>
+           </property>
+           <property name="frame">
+            <bool>true</bool>
+           </property>
+           <item>
+            <property name="text">
+             <string>Available</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Occupied</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Reserved</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QFrame" name="Table2">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>120</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: #E8F0FE;
+border-radius: 10px;</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Shape::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_12">
+         <item>
+          <widget class="QLabel" name="Table2Label">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <family>Franklin Gothic Medium</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(0, 0, 0);</string>
+           </property>
+           <property name="text">
+            <string>Table 2</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="Table2_Status">
+           <property name="font">
+            <font>
+             <family>Franklin Gothic Medium</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LayoutDirection::LeftToRight</enum>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QComboBox {
+    border-radius: 5px;
+    padding: 7px;
+    color: white;
+    background-color: green;
+    text-align: center; /* Center-align the text */
+}
+
+QComboBox:hover {
+    border-color: darkgreen;
+    background-color: #32CD32; /* Lighter green for hover effect */
+}
+
+QComboBox::drop-down {
+    width: 20px; /* Adjust width of the dropdown button */
+    border: none;
+}
+
+
+QComboBox QAbstractItemView {
+    background-color: white;
+    color: black;
+    selection-background-color: #32CD32; /* Highlight selected item in green */
+    selection-color: black;
+    padding: 5px;
+    text-align: center;
+    outline: none; /* Remove focus border for cleaner look */
+}
+</string>
+           </property>
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="placeholderText">
+            <string>Change Status</string>
+           </property>
+           <property name="frame">
+            <bool>true</bool>
+           </property>
+           <item>
+            <property name="text">
+             <string>Available</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Occupied</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Reserved</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QFrame" name="Table3">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>120</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: #E8F0FE;
+border-radius: 10px;</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Shape::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_13">
+         <item>
+          <widget class="QLabel" name="Table3Label">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <family>Franklin Gothic Medium</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(0, 0, 0);</string>
+           </property>
+           <property name="text">
+            <string>Table 3</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="Table3_Status">
+           <property name="font">
+            <font>
+             <family>Franklin Gothic Medium</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LayoutDirection::LeftToRight</enum>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QComboBox {
+    border-radius: 5px;
+    padding: 7px;
+    color: white;
+    background-color: green;
+    text-align: center; /* Center-align the text */
+}
+
+QComboBox:hover {
+    border-color: darkgreen;
+    background-color: #32CD32; /* Lighter green for hover effect */
+}
+
+QComboBox::drop-down {
+    width: 20px; /* Adjust width of the dropdown button */
+    border: none;
+}
+
+
+QComboBox QAbstractItemView {
+    background-color: white;
+    color: black;
+    selection-background-color: #32CD32; /* Highlight selected item in green */
+    selection-color: black;
+    padding: 5px;
+    text-align: center;
+    outline: none; /* Remove focus border for cleaner look */
+}
+</string>
+           </property>
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="placeholderText">
+            <string>Change Status</string>
+           </property>
+           <property name="frame">
+            <bool>true</bool>
+           </property>
+           <item>
+            <property name="text">
+             <string>Available</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Occupied</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Reserved</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer_8">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>66</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

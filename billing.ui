@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Billing</class>
+ <widget class="QWidget" name="Billing">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>492</width>
+    <height>439</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="styleSheet">
+      <string notr="true">font: 700 22pt &quot;Leelawadee UI&quot;;
+background-color: #E8F0FE;
+border-radius: 10px;
+color: rgb(0, 0, 0);
+padding: 5px;</string>
+     </property>
+     <property name="text">
+      <string> Billing</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="BillingPanel" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: #E8F0FE;
+border-radius: 10px;</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_17">
+      <property name="spacing">
+       <number>12</number>
+      </property>
+      <property name="leftMargin">
+       <number>12</number>
+      </property>
+      <property name="topMargin">
+       <number>12</number>
+      </property>
+      <property name="rightMargin">
+       <number>12</number>
+      </property>
+      <property name="bottomMargin">
+       <number>12</number>
+      </property>
+      <item>
+       <spacer name="verticalSpacer_5">
+        <property name="orientation">
+         <enum>Qt::Orientation::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="BillingPanelTitle">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>Franklin Gothic Medium</family>
+          <pointsize>20</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(0, 0, 0);</string>
+        </property>
+        <property name="text">
+         <string>Billing Panel</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="BillingUIContainer">
+        <item>
+         <widget class="QListWidget" name="FoodListWidget">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Franklin Gothic Medium</family>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: #E8F0FE;
+border-radius: 10px;
+border: 2px solid rgb(162, 168, 179);
+color: black;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="FoodSelect">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QComboBox" name="FoodItemSelect">
+            <property name="font">
+             <font>
+              <family>Franklin Gothic Medium</family>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QComboBox {
+    border-radius: 5px;
+    padding: 7px;
+    color: white;
+    background-color: green;
+    text-align: center; /* Center-align the text */
+}
+
+QComboBox:hover {
+    border-color: darkgreen;
+    background-color: #32CD32; /* Lighter green for hover effect */
+}
+
+QComboBox::drop-down {
+    width: 20px; /* Adjust width of the dropdown button */
+    border: none;
+}
+
+
+QComboBox QAbstractItemView {
+    background-color: white;
+    color: black;
+    selection-background-color: #32CD32; /* Highlight selected item in green */
+    selection-color: black;
+    padding: 5px;
+    text-align: center;
+    outline: none; /* Remove focus border for cleaner look */
+}
+</string>
+            </property>
+            <property name="currentText">
+             <string/>
+            </property>
+            <property name="currentIndex">
+             <number>-1</number>
+            </property>
+            <property name="placeholderText">
+             <string>Choose Food Item</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>Chicken Vindaloo</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Butter Chicken</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Chicken Curry</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Basmati Rice</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Large Soda</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="FoodQuantitySelect">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QComboBox {
+    border-radius: 5px;
+    padding: 7px;
+    color: white;
+    background-color: green;
+    text-align: center; /* Center-align the text */
+}
+
+QComboBox:hover {
+    border-color: darkgreen;
+    background-color: #32CD32; /* Lighter green for hover effect */
+}
+
+QComboBox::drop-down {
+    width: 20px; /* Adjust width of the dropdown button */
+    border: none;
+}
+
+
+QComboBox QAbstractItemView {
+    background-color: white;
+    color: black;
+    selection-background-color: #32CD32; /* Highlight selected item in green */
+    selection-color: black;
+    padding: 5px;
+    text-align: center;
+    outline: none; /* Remove focus border for cleaner look */
+}
+</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>1x</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2x</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>3x</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>4x</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>5x</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>6x</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>7x</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>8x</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QComboBox" name="DeliveryTypeSelect">
+          <property name="font">
+           <font>
+            <family>Franklin Gothic Medium</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LayoutDirection::LeftToRight</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QComboBox {
+    border-radius: 5px;
+    padding: 7px;
+    color: white;
+    background-color: green;
+    text-align: center; /* Center-align the text */
+}
+
+QComboBox:hover {
+    border-color: darkgreen;
+    background-color: #32CD32; /* Lighter green for hover effect */
+}
+
+QComboBox::drop-down {
+    width: 20px; /* Adjust width of the dropdown button */
+    border: none;
+}
+
+
+QComboBox QAbstractItemView {
+    background-color: white;
+    color: black;
+    selection-background-color: #32CD32; /* Highlight selected item in green */
+    selection-color: black;
+    padding: 5px;
+    text-align: center;
+    outline: none; /* Remove focus border for cleaner look */
+}
+</string>
+          </property>
+          <property name="currentText">
+           <string/>
+          </property>
+          <property name="placeholderText">
+           <string>Choose Delivery Type</string>
+          </property>
+          <item>
+           <property name="text">
+            <string>Tables</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Take Out</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Delivery</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="BillingButtons">
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="FoodAddBtn">
+            <property name="autoFillBackground">
+             <bool>false</bool>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    color: white; /* Text color */
+    background-color: green; /* Background color */
+}
+
+QPushButton:hover {
+    background-color: #32CD32;
+}
+
+QPushButton:pressed {
+    background-color: darkgreen; /* Darker green when pressed */
+    border-color: black; /* Border changes on press */
+}
+</string>
+            </property>
+            <property name="text">
+             <string>ADD</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="FoodFinalizeBtn">
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    color: white; /* Text color */
+    background-color: red; /* Background color */
+}
+
+QPushButton:hover {
+    background-color: #FF6666;
+}
+
+QPushButton:pressed {
+    background-color: darkred; /* Darker green when pressed */
+    border-color: black; /* Border changes on press */
+}
+</string>
+            </property>
+            <property name="text">
+             <string>FINALIZE</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="verticalSpacer_6">
+        <property name="orientation">
+         <enum>Qt::Orientation::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>471</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -9,20 +9,38 @@ CONFIG += c++20
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    billing.cpp \
+    inventory.cpp \
     loginpage.cpp \
     main.cpp \
     mainwindow.cpp \
-    ordercard.cpp
+    menu.cpp \
+    ordercard.cpp \
+    orders.cpp \
+    reservations.cpp \
+    tables.cpp
 
 HEADERS += \
+    billing.h \
+    inventory.h \
     loginpage.h \
     mainwindow.h \
-    ordercard.h
+    menu.h \
+    ordercard.h \
+    orders.h \
+    reservations.h \
+    tables.h
 
 FORMS += \
+    billing.ui \
+    inventory.ui \
     loginpage.ui \
     mainwindow.ui \
-    ordercard.ui
+    menu.ui \
+    ordercard.ui \
+    orders.ui \
+    reservations.ui \
+    tables.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -14,14 +14,8 @@ int main(int argc, char *argv[])
         std::cout << driver.toStdString() << std::endl;
     }
 
-    // Show login page first
     loginpage login;
     login.show();
-
-
-    // Optional: If login succeeds, you can show MainWindow
-    // MainWindow w;
-    // w.show();
 
     return a.exec();
 }
