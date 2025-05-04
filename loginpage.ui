@@ -188,9 +188,8 @@ QPushButton:pressed {
       <item alignment="Qt::AlignmentFlag::AlignBottom">
        <widget class="QFrame" name="frame">
         <property name="styleSheet">
-         <string notr="true">      background-color: #E8F0FE;  /* Light blue for buttons */
-       border: none;
-       border-radius: 10px;        /* Rounded corners */</string>
+         <string notr="true">border: none;
+border-radius: 10px;</string>
         </property>
         <property name="frameShape">
          <enum>QFrame::Shape::StyledPanel</enum>
