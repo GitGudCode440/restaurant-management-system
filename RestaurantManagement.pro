@@ -12,11 +12,13 @@ SOURCES += \
     loginpage.cpp \
     main.cpp \
     mainwindow.cpp \
+    menuitemcard.cpp \
     ordercard.cpp
 
 HEADERS += \
     loginpage.h \
     mainwindow.h \
+    menuitemcard.h \
     ordercard.h
 
 FORMS += \

@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "loginpage.h"
+#include "menuitemcard.h"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -8,13 +9,10 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-    // Connect the signal to the slot
-    connect(ui->Table1_Status, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int index) {
-        QString status = ui->Table1_Status->currentText();
-        setComboBoxColor(ui->Table1_Status, status);
-    });
-
+    
+    // Set up frameless window
+    this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+    
     // Initialize combo boxes and line edits
     Table1_Status = ui->Table1_Status;
     Table2_Status = ui->Table2_Status;
@@ -38,6 +36,17 @@ MainWindow::MainWindow(QWidget *parent)
     // Initialize the count display
     updateTableStatusCounts();
 
+    // Initialize inventory table column widths
+    QTableWidget* inventoryTable = ui->inventoryTable;
+    inventoryTable->setColumnWidth(0, 150); // Item Name
+    inventoryTable->setColumnWidth(1, 150); // Category
+    inventoryTable->setColumnWidth(2, 100); // Quantity
+    // Status column will stretch due to horizontalHeaderStretchLastSection
+
+    // Initialize order count
+    orderCount = 0;
+    // Show "No orders in progress" by default
+    ui->noOrdersLabel->setVisible(true);
 }
 
 MainWindow::~MainWindow()
@@ -77,6 +86,10 @@ void MainWindow::on_InventoryBtn_clicked()
 
 void MainWindow::addOrderCards(OrderCard* card) {
     ui->OrderListLayout->addWidget(card);
+    orderCount++;
+    
+    // Hide "No orders in progress" label when an order is added
+    ui->noOrdersLabel->setVisible(false);
 }
 
 void MainWindow::addOrder(OrderCard* card) {
@@ -140,22 +153,8 @@ void MainWindow::on_LogoutBtn_clicked()
     this->close();
 }
 
-void MainWindow::setComboBoxColor(QComboBox *comboBox, const QString &status)
-{
-    if (status == "Available") {
-        comboBox->setStyleSheet("QComboBox { background-color: green;  }");
-    } else if (status == "Occupied") {
-        comboBox->setStyleSheet("QComboBox { background-color: red; ");
-    } else if (status == "Reserved") {
-        comboBox->setStyleSheet("QComboBox { background-color: orange; ");
-    } else {
-        comboBox->setStyleSheet(""); // Reset to default
-    }
-}
-
 void MainWindow::on_btn_reserve_clicked()
 {
-
     QDateEdit* dateEdit = ui->dateEdit_date;
     QTimeEdit* timeEdit = ui->timeEdit_time;
     QLineEdit* reservationName = ui->reservation_name;
@@ -183,6 +182,7 @@ void MainWindow::on_btn_reserve_clicked()
 
     currentRow++;
 }
+
 void MainWindow::on_addButton_clicked()
 {
     // Get references to your input fields
@@ -191,6 +191,11 @@ void MainWindow::on_addButton_clicked()
     QLineEdit* quantityEdit = ui->quantityEdit;
     QComboBox* statusCombo = ui->statusCombo;
     QTableWidget* table = ui->inventoryTable;
+
+    // Skip adding if required fields are empty
+    if (itemNameEdit->text().isEmpty() || categoryEdit->text().isEmpty() || quantityEdit->text().isEmpty()) {
+        return;
+    }
 
     // Create new items for the table
     QTableWidgetItem* tableItem;
@@ -209,6 +214,12 @@ void MainWindow::on_addButton_clicked()
         }
         table->setItem(currentRow, i, tableItem);
     }
+
+    // Ensure columns maintain their width
+    table->setColumnWidth(0, 150); // Item Name
+    table->setColumnWidth(1, 150); // Category
+    table->setColumnWidth(2, 100); // Quantity
+    // Status column will stretch due to horizontalHeaderStretchLastSection
 
     // Clear input fields after adding
     itemNameEdit->clear();
@@ -252,5 +263,87 @@ void MainWindow::updateTableStatusCounts()
     availableCount->setText(QString::number(available));
     occupiedCount->setText(QString::number(occupied));
     reservedCount->setText(QString::number(reserved));
+}
+
+void MainWindow::on_AdditemBtn_clicked()
+{
+    // Get references to your input fields
+    QLineEdit* itemName = ui->ItemName;
+    QLineEdit* price = ui->Price;
+    
+    // Check if the fields are not empty
+    if (!itemName->text().isEmpty() && !price->text().isEmpty()) {
+        // Create a new menu item card
+        createMenuItemCard(itemName->text(), "", price->text());
+        
+        // Clear the input fields
+        itemName->clear();
+        price->clear();
+        
+        // Set focus back to item name field
+        itemName->setFocus();
+    }
+}
+
+void MainWindow::createMenuItemCard(const QString& name, const QString& description, const QString& price)
+{
+    // Create a new menu item card widget
+    MenuItemCard* card = new MenuItemCard(name, description, price, this);
+    
+    // Add the card to the menu items layout
+    ui->menuItemsLayout->addWidget(card);
+}
+
+// Window control buttons implementation
+void MainWindow::on_pushButton_2_clicked()
+{
+    // Minimize button
+    this->setWindowState(Qt::WindowMinimized);
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    // Maximize/Restore button
+    if(this->isMaximized()) {
+        this->showNormal();
+    } else {
+        this->showMaximized();
+    }
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    // Close button
+    this->close();
+}
+
+// Add these methods to handle window dragging
+void MainWindow::mousePressEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton) {
+        // Check if the click position is in the header area
+        if (event->pos().y() < 50) {
+            dragPosition = event->globalPosition().toPoint() - frameGeometry().topLeft();
+            event->accept();
+        }
+    }
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent* event)
+{
+    if (event->buttons() & Qt::LeftButton) {
+        // Only move if the drag started in the header area
+        if (!dragPosition.isNull()) {
+            move(event->globalPosition().toPoint() - dragPosition);
+            event->accept();
+        }
+    }
+}
+
+void MainWindow::mouseReleaseEvent(QMouseEvent* event)
+{
+    // Reset dragPosition when mouse is released
+    dragPosition = QPoint();
+    event->accept();
 }
 
