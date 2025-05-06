@@ -81,7 +81,7 @@ OrderType OrderCard::convertQStringToOrderType(const QString& str) {
 }
 
 QString OrderCard::convertOrderTypeToQString(const OrderType& type) {
-    if (str ==)
+    return "";
 }
 
 
