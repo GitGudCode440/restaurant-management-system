@@ -4,12 +4,15 @@
 #include "mainwindow.h"
 #include "ordercard.h"
 
+#include <QSqlQuery>
+
 
 Billing::Billing(QWidget* parent)
-    : QWidget(parent)
-    , ui(new Ui::Billing)
+    : QWidget(parent),
+      ui(new Ui::Billing)
 {
     ui->setupUi(this);
+
 
 }
 
@@ -54,7 +57,19 @@ void Billing::on_FoodFinalizeBtn_clicked()
         }
     }
 
-    emit addOrder(card);
+    QSqlQuery query;
+
+    int id;
+
+    if (query.exec("SELECT MAX(order_id) AS last_id FROM Orders;")) {
+        query.next();
+        id = query.value(0).toInt();
+    }
+    else
+        id = -1;
+
+
+    emit addOrder(card, id);
 
     listWidget->clear();
 

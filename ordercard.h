@@ -24,10 +24,18 @@ public:
 
     void addTextToListWidget(const QString& text);
 
+    QString getOrderLabelText() const { return orderLabelText; }
+    QString getDetailsText() const { return detailsText; }
+    OrderType getOrderType() const { return orderType; }
+    float getOrderPrice() const { return orderPrice; }
+
     void changeOrderLabelText(const QString& text);
-    void changeDetails(const QString& text);
+    void changeDetailsText(const QString& text);
     void changeOrderType(const OrderType& type);
     void changeOrderPrice(const float price);
+
+    static OrderType convertQStringToOrderType(const QString& str);
+    static QString convertOrderTypeToQString(const OrderType& type);
 
 private slots:
     void on_OrderDetailsBtn_clicked();
@@ -36,6 +44,11 @@ private slots:
 
 private:
     Ui::OrderCard *ui;
+
+    QString orderLabelText;
+    QString detailsText;
+    OrderType orderType;
+    float orderPrice;
 };
 
 #endif // ORDERCARD_H

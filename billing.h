@@ -20,7 +20,7 @@ public:
     ~Billing();
 
 signals:
-    void addOrder(OrderCard* card);
+    void addOrder(OrderCard* card, int id);
 
 private slots:
     void on_FoodAddBtn_clicked();

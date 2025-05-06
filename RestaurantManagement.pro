@@ -10,6 +10,7 @@ CONFIG += c++20
 
 SOURCES += \
     billing.cpp \
+    globals.cpp \
     inventory.cpp \
     loginpage.cpp \
     main.cpp \
@@ -22,6 +23,7 @@ SOURCES += \
 
 HEADERS += \
     billing.h \
+    globals.h \
     inventory.h \
     loginpage.h \
     mainwindow.h \

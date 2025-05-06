@@ -1,32 +1,39 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "loginpage.h"
-#include <iostream>
+#include <QSqlDatabase>
 
+#include "globals.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , db(QSqlDatabase::addDatabase("QMYSQL"))
 {
     ui->setupUi(this);
 
-    db.setHostName("127.0.0.1");
-    db.setPort(3306);
-    db.setDatabaseName("restaurant_db");
-    db.setUserName("root");
-    db.setPassword("12345");
+    Globals::db = QSqlDatabase::addDatabase("QMYSQL");
 
-    if (!db.open()) {
-        QMessageBox::critical(this, "Database Error", "Unable to connect to database");
+    Globals::db.setHostName("127.0.0.1");
+    Globals::db.setPort(3306);
+    Globals::db.setDatabaseName("restaurant_db");
+    Globals::db.setUserName("root");
+    Globals::db.setPassword("12345");
+
+
+
+    if (!Globals::db.open()) {
+        QMessageBox::critical(nullptr, "Database Error", "Unable to connect to database");
     }
 
+
     connect(ui->BillingPage, &Billing::addOrder, this, &MainWindow::addOrder);
+    connect(ui->OrdersPage, &Orders::addOrder, this, &MainWindow::addOrder);
 
 }
 
 MainWindow::~MainWindow()
 {
+    Globals::db.close();
     delete ui;
 }
 
@@ -61,11 +68,21 @@ void MainWindow::on_InventoryBtn_clicked()
 }
 
 
-void MainWindow::addOrder(OrderCard* card) {
+void MainWindow::addOrder(OrderCard* card, int id) {
 
-    QString orderId = QString("Order %1-%2")
-                          .arg(QDateTime::currentMSecsSinceEpoch())
-                          .arg(QUuid::createUuid().toString(QUuid::WithoutBraces));
+
+    QSqlQuery query(Globals::db);
+    query.prepare(R"(
+        INSERT INTO Orders (order_type, order_details, order_price)
+        VALUES (:type, :details, :price)
+    )");
+
+    query.bindValue(":type", OrderCard::convertOrderTypeToQString(card->getOrderType()));
+    query.bindValue(":details", card->getDetailsText());
+    query.bindValue(":price", card->getOrderPrice());
+
+
+    QString orderId = QString("Order #%1").arg(id);
     card->changeOrderLabelText(orderId);
     ui->OrdersPage->addWidgetToOrderList(card);
 }

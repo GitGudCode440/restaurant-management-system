@@ -19,6 +19,7 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+class Orders;
 class OrderCard;
 
 class MainWindow : public QMainWindow
@@ -39,12 +40,11 @@ private slots:
     void on_ReservationsBtn_clicked();
     void on_InventoryBtn_clicked();
 
-    void addOrder(OrderCard* card);
+    void addOrder(OrderCard* card, int id);
 
 
 private:
     Ui::MainWindow *ui;
-    QSqlDatabase db;
 
     int currentRow = 0;
 
