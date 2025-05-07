@@ -33,7 +33,6 @@ MainWindow::MainWindow(QWidget *parent)
     }
     qDebug() << "Database connection successful";
 
-    // Verify database connection
     QSqlQuery testQuery(db);
     qDebug() << "Testing database connection";
     if (!testQuery.exec("SELECT 1")) {
@@ -44,7 +43,6 @@ MainWindow::MainWindow(QWidget *parent)
     }
     qDebug() << "Database connection test successful";
 
-    // Initialize tables if they don't exist
     QSqlQuery query(db);
     
     qDebug() << "Creating Tables table if not exists";
@@ -57,7 +55,6 @@ MainWindow::MainWindow(QWidget *parent)
     }
     qDebug() << "Tables table created/verified";
     
-    // Create Orders table if it doesn't exist
     if (!query.exec("CREATE TABLE IF NOT EXISTS Orders ("
                    "order_id INT AUTO_INCREMENT PRIMARY KEY, "
                    "order_type VARCHAR(20) NOT NULL, "
@@ -70,7 +67,6 @@ MainWindow::MainWindow(QWidget *parent)
     }
     qDebug() << "Orders table created/verified";
     
-    // Initialize table statuses if they don't exist
     for (int i = 1; i <= 6; i++) {
         query.prepare("INSERT IGNORE INTO Tables (table_id, status) VALUES (?, 'Available')");
         query.addBindValue(i);
@@ -122,6 +118,8 @@ MainWindow::MainWindow(QWidget *parent)
     initializeReservations();
     qDebug() << "Initializing inventory";
     initializeInventory();
+    qDebug() << "Initializing menu items container";
+    initializeMenuItems();
     qDebug() << "MainWindow constructor completed";
 }
 
@@ -160,12 +158,10 @@ void MainWindow::initializeReservations() {
             int guests = query.value(5).toInt();
             QString contact = query.value(6).toString();
 
-            // Add to UI table
             QTableWidget* table = ui->tableWidget_tables;
 
             table->insertRow(currentRow);
 
-            // Set items in the table
             table->setItem(currentRow, 0, new QTableWidgetItem(customerName));
             table->setItem(currentRow, 1, new QTableWidgetItem(QString("Table %1").arg(tableId)));
             table->setItem(currentRow, 2, new QTableWidgetItem(date.toString("yyyy-MM-dd")));
@@ -195,7 +191,7 @@ void MainWindow::on_TablesBtn_clicked()
 void MainWindow::on_MenuBtn_clicked()
 {
     ui->NavigationTabs->setCurrentIndex(1);
-    loadMenuItems();  // Load menu items when switching to Menu tab
+    loadMenuItems();
 }
 
 void MainWindow::on_OrdersBtn_clicked()
@@ -226,7 +222,7 @@ void MainWindow::addOrderCards(OrderCard* card) {
 void MainWindow::addOrder(OrderCard* card, int id) {
     QString orderId = QString("Order #%1").arg(id);
     card->changeOrderLabelText(orderId);
-    card->setOrderId(id);  // Set the order ID in the card
+    card->setOrderId(id);
     ui->OrderListLayout->addWidget(card);
 }
 
@@ -305,11 +301,9 @@ void MainWindow::on_FoodFinalizeBtn_clicked()
 
 void MainWindow::on_LogoutBtn_clicked()
 {
-    // Create a new instance of loginpage
     loginpage *login = new loginpage();
     login->show();
 
-    // Close the main window
     this->close();
 }
 
@@ -322,7 +316,7 @@ void MainWindow::setComboBoxColor(QComboBox *comboBox, const QString &status)
     } else if (status == "Reserved") {
         comboBox->setStyleSheet("QComboBox { background-color: orange; } ");
     } else {
-        comboBox->setStyleSheet(""); // Reset to default
+        comboBox->setStyleSheet("");
     }
 }
 
@@ -335,7 +329,6 @@ void MainWindow::on_btn_reserve_clicked()
     QSpinBox* spinBox = ui->spinBox_guests;
     QComboBox* tableNo = ui->comboBox_selectTable;
 
-    // Get the selected table number - extract number from text like "Table 1"
     QString tableText = tableNo->currentText();
     int tableId = tableText.split(" ").last().toInt();
     
@@ -344,7 +337,6 @@ void MainWindow::on_btn_reserve_clicked()
         return;
     }
 
-    // Check if the table is available
     QSqlQuery checkQuery(db);
     checkQuery.prepare("SELECT status FROM Tables WHERE table_id = ?");
     checkQuery.addBindValue(tableId);
@@ -361,11 +353,9 @@ void MainWindow::on_btn_reserve_clicked()
         return;
     }
 
-    // Get the reservation date and time
     QDateTime reservationDateTime(dateEdit->date(), timeEdit->time());
     QDateTime currentDateTime = QDateTime::currentDateTime();
 
-    // Determine table status based on reservation time
     QString tableStatus;
     if (reservationDateTime <= currentDateTime) {
         tableStatus = "Occupied";
@@ -373,7 +363,6 @@ void MainWindow::on_btn_reserve_clicked()
         tableStatus = "Reserved";
     }
 
-    // Store reservation in database
     QSqlQuery insertQuery(db);
     insertQuery.prepare("INSERT INTO Reservations (customer_name, table_id, reservation_date, reservation_time, number_of_guests, contact_number) "
                        "VALUES (?, ?, ?, ?, ?, ?)");
@@ -390,7 +379,6 @@ void MainWindow::on_btn_reserve_clicked()
         return;
     }
 
-    // Update the table status in the database
     QSqlQuery query(db);
     query.prepare("UPDATE Tables SET status = ? WHERE table_id = ?");
     query.addBindValue(tableStatus);
@@ -401,7 +389,6 @@ void MainWindow::on_btn_reserve_clicked()
         return;
     }
 
-    // Update the UI table status
     QComboBox* tableStatusCombo = nullptr;
     switch (tableId) {
         case 1: tableStatusCombo = Table1_Status; break;
@@ -420,7 +407,6 @@ void MainWindow::on_btn_reserve_clicked()
         }
     }
 
-    // Update the reservations table
     QTableWidget* table = ui->tableWidget_tables;
 
     table->insertRow(currentRow);
@@ -438,10 +424,8 @@ void MainWindow::on_btn_reserve_clicked()
 
     currentRow++;
 
-    // Update table status counts
     updateTableStatusCounts();
 
-    // Clear input fields
     reservationName->clear();
     reservationContact->clear();
     spinBox->setValue(1);
@@ -454,20 +438,15 @@ void MainWindow::on_btn_reserve_clicked()
 
 void MainWindow::on_addButton_clicked()
 {
-    // Get references to your input fields
     QLineEdit* itemNameEdit = ui->itemNameEdit;
     QLineEdit* categoryEdit = ui->categoryEdit;
     QLineEdit* quantityEdit = ui->quantityEdit;
-    QComboBox* statusCombo = ui->statusCombo;
-    QTableWidget* table = ui->inventoryTable;
 
-    // Validate input
-    if (itemNameEdit->text().isEmpty() || categoryEdit->text().isEmpty() || quantityEdit->text().isEmpty()) {
-        QMessageBox::warning(nullptr, "Input Error", "Please fill in all fields");
+    if (itemNameEdit->text().isEmpty() || quantityEdit->text().isEmpty()) {
+        QMessageBox::warning(nullptr, "Input Error", "Please fill in name and price fields");
         return;
     }
 
-    // Convert quantity to price (assuming quantityEdit is being used for price)
     bool ok;
     float price = quantityEdit->text().toFloat(&ok);
     if (!ok || price <= 0) {
@@ -475,45 +454,21 @@ void MainWindow::on_addButton_clicked()
         return;
     }
 
-    // Insert into database
-    QSqlQuery query(db);
-    query.prepare("INSERT INTO Menu (item_name, category, price, description) "
-                 "VALUES (:name, :category, :price, :description)");
+    QString itemName = itemNameEdit->text();
+    QString category = categoryEdit->text().isEmpty() ? "Uncategorized" : categoryEdit->text();
+    QString priceText = QString::number(price, 'f', 2);
+
+    MenuItemCard* card = new MenuItemCard(itemName, category, priceText);
+    menuItemsLayout->addWidget(card);
     
-    query.bindValue(":name", itemNameEdit->text());
-    query.bindValue(":category", categoryEdit->text());
-    query.bindValue(":price", price);
-    query.bindValue(":description", statusCombo->currentText());  // Using statusCombo for description
+    clearMenuInputs();
+}
 
-    if (!query.exec()) {
-        QMessageBox::critical(nullptr, "Database Error", 
-            QString("Failed to add menu item: %1").arg(query.lastError().text()));
-        return;
-    }
-
-    // Add to table widget
-    int currentRow = table->rowCount();
-    table->insertRow(currentRow);
-
-    QTableWidgetItem* tableItem;
-    for (int i = 0; i < 4; i++) {
-        switch(i) {
-        case 0: tableItem = new QTableWidgetItem(itemNameEdit->text()); break;
-        case 1: tableItem = new QTableWidgetItem(categoryEdit->text()); break;
-        case 2: tableItem = new QTableWidgetItem(QString::number(price, 'f', 2)); break;
-        case 3: tableItem = new QTableWidgetItem(statusCombo->currentText()); break;
-        }
-        table->setItem(currentRow, i, tableItem);
-    }
-
-    // Clear input fields
-    itemNameEdit->clear();
-    categoryEdit->clear();
-    quantityEdit->clear();
-    statusCombo->setCurrentIndex(0);
-
-    // Reload menu items
-    loadMenuItems();
+void MainWindow::clearMenuInputs()
+{
+    ui->itemNameEdit->clear();
+    ui->categoryEdit->clear();
+    ui->quantityEdit->clear();
 }
 
 void MainWindow::loadTableStatuses() {
@@ -578,7 +533,6 @@ void MainWindow::updateTableStatusCounts()
     int occupied = 0;
     int reserved = 0;
 
-    // Check the status of each table and update counts
     if (Table1_Status->currentText() == "Available") available++;
     if (Table1_Status->currentText() == "Occupied") occupied++;
     if (Table1_Status->currentText() == "Reserved") reserved++;
@@ -609,7 +563,6 @@ void MainWindow::updateTableStatusCounts()
     if (Table6_Status->currentText() == "Reserved") reserved++;
     updateTableStatus(6, Table6_Status->currentText());
 
-    // Update the line edits with the new counts
     availableCount->setText(QString::number(available));
     occupiedCount->setText(QString::number(occupied));
     reservedCount->setText(QString::number(reserved));
@@ -624,7 +577,6 @@ void MainWindow::loadMenuItems()
         return;
     }
 
-    // Clear existing items
     ui->FoodListWidget->clear();
 
     QString currentCategory;
@@ -634,7 +586,6 @@ void MainWindow::loadMenuItems()
         float price = query.value(2).toFloat();
         QString description = query.value(3).toString();
 
-        // Add category header if it's a new category
         if (category != currentCategory) {
             currentCategory = category;
             QListWidgetItem* categoryItem = new QListWidgetItem(category);
@@ -643,7 +594,6 @@ void MainWindow::loadMenuItems()
             ui->FoodListWidget->addItem(categoryItem);
         }
 
-        // Create menu item text
         QString itemText = QString("%1 - $%2").arg(itemName).arg(price, 0, 'f', 2);
         if (!description.isEmpty()) {
             itemText += QString("\n    %1").arg(description);
@@ -656,19 +606,15 @@ void MainWindow::loadMenuItems()
 
 void MainWindow::on_tableWidget_tables_itemDoubleClicked(QTableWidgetItem *item)
 {
-    // Get the row of the double-clicked item
     int row = item->row();
     
-    // Get the table number from the second column (index 1)
     QString tableText = ui->tableWidget_tables->item(row, 1)->text();
     int tableId = tableText.split(" ").last().toInt();
 
-    // Get the reservation details for deletion
     QString customerName = ui->tableWidget_tables->item(row, 0)->text();
     QDate date = QDate::fromString(ui->tableWidget_tables->item(row, 2)->text(), "yyyy-MM-dd");
     QTime time = QTime::fromString(ui->tableWidget_tables->item(row, 3)->text(), "hh:mm");
 
-    // Confirm deletion with the user
     QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Deletion",
         "Are you sure you want to delete this reservation?",
         QMessageBox::Yes | QMessageBox::No);
@@ -677,7 +623,6 @@ void MainWindow::on_tableWidget_tables_itemDoubleClicked(QTableWidgetItem *item)
         return;
     }
 
-    // Delete from database
     QSqlQuery deleteQuery(db);
     deleteQuery.prepare("DELETE FROM Reservations WHERE customer_name = ? AND table_id = ? AND reservation_date = ? AND reservation_time = ?");
     deleteQuery.addBindValue(customerName);
@@ -690,7 +635,6 @@ void MainWindow::on_tableWidget_tables_itemDoubleClicked(QTableWidgetItem *item)
         return;
     }
 
-    // Update the table status to Available in the database
     QSqlQuery query(db);
     query.prepare("UPDATE Tables SET status = 'Available' WHERE table_id = ?");
     query.addBindValue(tableId);
@@ -700,7 +644,6 @@ void MainWindow::on_tableWidget_tables_itemDoubleClicked(QTableWidgetItem *item)
         return;
     }
 
-    // Update the UI table status
     QComboBox* tableStatusCombo = nullptr;
     switch (tableId) {
         case 1: tableStatusCombo = Table1_Status; break;
@@ -719,40 +662,31 @@ void MainWindow::on_tableWidget_tables_itemDoubleClicked(QTableWidgetItem *item)
         }
     }
 
-    // Remove the row from the reservations table
     ui->tableWidget_tables->removeRow(row);
 
-    // Update table status counts
     updateTableStatusCounts();
 
     QMessageBox::information(this, "Success", "Reservation deleted successfully");
 }
 
 void MainWindow::initializeInventory() {
-    // Set up inventory table
-    ui->inventoryTable->setColumnCount(5); // ID (hidden), Item Name, Category, Quantity, Status
+    ui->inventoryTable->setColumnCount(5);
     ui->inventoryTable->setHorizontalHeaderLabels(QStringList() << "ID" << "Item Name" << "Category" << "Quantity" << "Status");
     ui->inventoryTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->inventoryTable->setColumnHidden(0, true); // Hide ID column
+    ui->inventoryTable->setColumnHidden(0, true);
     
-    // Connect the addButton in the inventory tab to our renamed slot
     QPushButton* inventoryAddBtn = ui->addButton;
     if (inventoryAddBtn) {
-        // Disconnect any existing connections to avoid duplicate signals
         disconnect(inventoryAddBtn, SIGNAL(clicked()), this, SLOT(on_addButton_clicked()));
-        // Connect to our renamed slot
         connect(inventoryAddBtn, SIGNAL(clicked()), this, SLOT(on_inventoryAddButton_clicked()));
     }
     
-    // Load inventory data
     loadInventoryItems();
     
-    // Clear input fields
     clearInventoryInputs();
 }
 
 void MainWindow::loadInventoryItems() {
-    // Clear existing table data
     ui->inventoryTable->setRowCount(0);
     
     QSqlQuery query(db);
@@ -761,21 +695,18 @@ void MainWindow::loadInventoryItems() {
         while (query.next()) {
             ui->inventoryTable->insertRow(row);
             
-            // Store ID in the first column (hidden)
             ui->inventoryTable->setItem(row, 0, new QTableWidgetItem(query.value(0).toString()));
             
-            // Display other info
             ui->inventoryTable->setItem(row, 1, new QTableWidgetItem(query.value(1).toString()));
             ui->inventoryTable->setItem(row, 2, new QTableWidgetItem(query.value(2).toString()));
             ui->inventoryTable->setItem(row, 3, new QTableWidgetItem(query.value(3).toString()));
             ui->inventoryTable->setItem(row, 4, new QTableWidgetItem(query.value(4).toString()));
             
-            // Color-code status
             QTableWidgetItem* statusItem = ui->inventoryTable->item(row, 4);
             if (query.value(4).toString() == "In Stock") {
-                statusItem->setBackground(QColor("#c8e6c9")); // Light green
+                statusItem->setBackground(QColor("#c8e6c9"));
             } else if (query.value(4).toString() == "Low Stock") {
-                statusItem->setBackground(QColor("#ffecb3")); // Light yellow/amber
+                statusItem->setBackground(QColor("#ffecb3"));
             }
             
             row++;
@@ -789,15 +720,12 @@ void MainWindow::loadInventoryItems() {
 void MainWindow::on_inventoryTable_itemClicked(QTableWidgetItem *item) {
     int row = item->row();
     
-    // Get the ID from the hidden column
     currentSelectedInventoryId = ui->inventoryTable->item(row, 0)->text().toInt();
     
-    // Fill form fields with selected row data
     ui->itemNameEdit->setText(ui->inventoryTable->item(row, 1)->text());
     ui->categoryEdit->setText(ui->inventoryTable->item(row, 2)->text());
     ui->quantityEdit->setText(ui->inventoryTable->item(row, 3)->text());
     
-    // Set dropdown status
     QString status = ui->inventoryTable->item(row, 4)->text();
     int statusIndex = ui->statusCombo->findText(status);
     if (statusIndex >= 0) {
@@ -809,7 +737,7 @@ void MainWindow::clearInventoryInputs() {
     ui->itemNameEdit->clear();
     ui->categoryEdit->clear();
     ui->quantityEdit->clear();
-    ui->statusCombo->setCurrentIndex(0); // Default to "In Stock"
+    ui->statusCombo->setCurrentIndex(0);
     currentSelectedInventoryId = -1;
 }
 
@@ -819,7 +747,6 @@ void MainWindow::on_inventoryAddButton_clicked() {
     QString quantityText = ui->quantityEdit->text().trimmed();
     QString status = ui->statusCombo->currentText();
     
-    // Validate inputs
     if (itemName.isEmpty() || category.isEmpty() || quantityText.isEmpty()) {
         QMessageBox::warning(this, "Validation Error", "Please fill in all fields.");
         return;
@@ -834,7 +761,6 @@ void MainWindow::on_inventoryAddButton_clicked() {
     
     QSqlQuery query(db);
     
-    // If current ID is set, update existing item
     if (currentSelectedInventoryId > 0) {
         query.prepare("UPDATE Inventory SET item_name = ?, category = ?, quantity = ?, status = ? WHERE inventory_id = ?");
         query.addBindValue(itemName);
@@ -850,7 +776,6 @@ void MainWindow::on_inventoryAddButton_clicked() {
                 QString("Failed to update inventory item: %1").arg(query.lastError().text()));
         }
     } else {
-        // Insert new item
         query.prepare("INSERT INTO Inventory (item_name, category, quantity, status) VALUES (?, ?, ?, ?)");
         query.addBindValue(itemName);
         query.addBindValue(category);
@@ -865,19 +790,16 @@ void MainWindow::on_inventoryAddButton_clicked() {
         }
     }
     
-    // Refresh inventory list and clear inputs
     loadInventoryItems();
     clearInventoryInputs();
 }
 
 void MainWindow::on_deleteButton_clicked() {
-    // Check if an item is selected
     if (currentSelectedInventoryId <= 0) {
         QMessageBox::warning(this, "Selection Error", "Please select an item to delete.");
         return;
     }
     
-    // Confirm deletion
     QMessageBox::StandardButton confirm = QMessageBox::question(this, "Confirm Deletion", 
         "Are you sure you want to delete this inventory item?", 
         QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
@@ -886,7 +808,6 @@ void MainWindow::on_deleteButton_clicked() {
         return;
     }
     
-    // Delete the item
     QSqlQuery query(db);
     query.prepare("DELETE FROM Inventory WHERE inventory_id = ?");
     query.addBindValue(currentSelectedInventoryId);
@@ -899,5 +820,19 @@ void MainWindow::on_deleteButton_clicked() {
         QMessageBox::critical(this, "Database Error", 
             QString("Failed to delete inventory item: %1").arg(query.lastError().text()));
     }
+}
+
+void MainWindow::initializeMenuItems() {
+    menuItemsContainer = new QWidget(ui->Menu);
+    menuItemsLayout = new QVBoxLayout(menuItemsContainer);
+    menuItemsLayout->setSpacing(10);
+    menuItemsLayout->setContentsMargins(10, 10, 10, 10);
+    
+    QScrollArea* scrollArea = new QScrollArea(ui->Menu);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setWidget(menuItemsContainer);
+    scrollArea->setFrameShape(QFrame::NoFrame);
+    
+    ui->verticalLayout_22->addWidget(scrollArea);
 }
 

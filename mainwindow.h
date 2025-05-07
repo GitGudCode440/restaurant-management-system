@@ -6,6 +6,7 @@
 #include <QUuid>
 #include <QDateTime>
 #include "ordercard.h"
+#include "menuitemcard.h"
 #include <QComboBox>
 #include <QList>
 #include <QSqlDatabase>
@@ -14,6 +15,8 @@
 #include <QSqlError>
 #include <QListWidget>
 #include <QTableWidgetItem>
+#include <QScrollArea>
+#include <QVBoxLayout>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -67,12 +70,15 @@ private:
     void initializeOrders();
     void initializeReservations();
     void initializeInventory();
+    void initializeMenuItems();
     void clearInventoryInputs();
+    void clearMenuInputs();
     int currentRow = 0;
     QComboBox *Table1_Status, *Table2_Status, *Table3_Status, *Table4_Status, *Table5_Status, *Table6_Status;
     QLineEdit *availableCount, *occupiedCount, *reservedCount;
     int currentSelectedInventoryId = -1;
-
-
+    
+    QWidget* menuItemsContainer;
+    QVBoxLayout* menuItemsLayout;
 };
 #endif // MAINWINDOW_H
