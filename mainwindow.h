@@ -8,6 +8,12 @@
 #include "ordercard.h"
 #include <QComboBox>
 #include <QList>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QMessageBox>
+#include <QSqlError>
+#include <QListWidget>
+#include <QTableWidgetItem>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -42,14 +48,26 @@ private slots:
 
 
     void on_btn_reserve_clicked();
+    void loadTableStatuses();
+    void updateTableStatus(int tableId, const QString& status);
+    void loadMenuItems();
+
+
+    void on_tableWidget_tables_itemDoubleClicked(QTableWidgetItem *item);
 
 private:
     Ui::MainWindow *ui;
+    QSqlDatabase db;
+
     void addOrderCards(OrderCard* card);
-    void addOrder(OrderCard* card);
+    void addOrder(OrderCard* card, int id = -1);
+    void initializeOrders();
+    void initializeReservations();
     int currentRow = 0;
     QComboBox *Table1_Status, *Table2_Status, *Table3_Status, *Table4_Status, *Table5_Status, *Table6_Status;
     QLineEdit *availableCount, *occupiedCount, *reservedCount;
+
+
 
 };
 #endif // MAINWINDOW_H

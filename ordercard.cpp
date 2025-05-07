@@ -22,12 +22,15 @@ void OrderCard::addTextToListWidget(const QString& text) {
 }
 
 void OrderCard::changeOrderLabelText(const QString& text) {
-    ui->OrderLabel->setText(text);
+    orderLabelText = text;
+    ui->OrderLabel->setText(orderLabelText);
+
 }
 
-void OrderCard::changeDetails(const QString& text) {
-    const QString prefixStr = "Order Details:\n";
-    ui->DetailsLabel->setText(prefixStr + text);
+void OrderCard::changeDetailsText(const QString& text) {
+    const QString str = "Order Details:\n" + text;
+    detailsText = text;
+    ui->DetailsLabel->setText(str);
 }
 
 void OrderCard::changeOrderType(const OrderType& type) {
@@ -35,23 +38,28 @@ void OrderCard::changeOrderType(const OrderType& type) {
 
     switch(type) {
     case OrderType::TABLE:
+        orderType = OrderType::TABLE;
         ui->OrderTypeLabel->setText(prefixStr + "Table");
         break;
     case OrderType::TAKE_OUT:
+        orderType = OrderType::TAKE_OUT;
         ui->OrderTypeLabel->setText(prefixStr + "Take Out");
         break;
     case OrderType::DELIVERY:
+        orderType = OrderType::DELIVERY;
         ui->OrderTypeLabel->setText(prefixStr + "Delivery");
         break;
     default:
+        orderType = OrderType::INVALID;
         ui->OrderTypeLabel->setText(prefixStr + "INVALID");
         break;
     }
 }
 
 void OrderCard::changeOrderPrice(const float price) {
-    const QString prefixStr = "ORDER PRICE: ";
-    ui->OrderTypeLabel->setText(prefixStr + QString::number(price));
+    const QString str = "Total Price: " + QString::number(price);
+    orderPrice = price;
+    ui->TotalPriceLabel->setText(str);
 }
 
 void OrderCard::on_OrderDetailsBtn_clicked()
@@ -62,6 +70,18 @@ void OrderCard::on_OrderDetailsBtn_clicked()
     else {
         ui->OrderDetails->hide();
     }
+}
+
+
+OrderType OrderCard::convertQStringToOrderType(const QString& str) {
+    if (str == "Table") return OrderType::TABLE;
+    else if (str == "Take Out") return OrderType::TAKE_OUT;
+    else if (str == "Delivery") return OrderType::DELIVERY;
+    else return OrderType::INVALID;
+}
+
+QString OrderCard::convertOrderTypeToQString(const OrderType& type) {
+    return "";
 }
 
 
