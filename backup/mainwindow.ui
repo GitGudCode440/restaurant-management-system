@@ -2803,22 +2803,16 @@ padding: 5px;</string>
            <item>
             <layout class="QHBoxLayout" name="buttonLayout">
              <item>
-              <spacer name="horizontalSpacer_4">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
               <widget class="QPushButton" name="addButton">
                <property name="text">
                 <string>Add</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="updateButton">
+               <property name="text">
+                <string>Update</string>
                </property>
               </widget>
              </item>
@@ -2846,6 +2840,33 @@ QPushButton:pressed {
                </property>
                <property name="text">
                 <string>Delete</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="refreshButton">
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    border-radius: 10px; /* Rounded corners */
+    color: white; /* Text color */
+    background-color: orange; /* Background color */
+    font: bold 13px; /* Font style and size */
+    border: 2px solid orange; /* Border color */
+}
+
+QPushButton:hover {
+    background-color: #FFA500; /* Lighter orange on hover */
+    border-color: darkorange; /* Dark orange border on hover */
+}
+
+QPushButton:pressed {
+    background-color: darkorange; /* Darker orange when pressed */
+    border-color: black; /* Border changes on press */
+}
+</string>
+               </property>
+               <property name="text">
+                <string>Refresh</string>
                </property>
               </widget>
              </item>

@@ -45,18 +45,15 @@ private slots:
     void on_FoodFinalizeBtn_clicked();
     void updateTableStatusCounts();
     void on_addButton_clicked();
-    void on_deleteButton_clicked();
-    void on_inventoryAddButton_clicked();
+
 
     void on_btn_reserve_clicked();
     void loadTableStatuses();
     void updateTableStatus(int tableId, const QString& status);
     void loadMenuItems();
-    void loadInventoryItems();
 
 
     void on_tableWidget_tables_itemDoubleClicked(QTableWidgetItem *item);
-    void on_inventoryTable_itemClicked(QTableWidgetItem *item);
 
 private:
     Ui::MainWindow *ui;
@@ -66,12 +63,10 @@ private:
     void addOrder(OrderCard* card, int id = -1);
     void initializeOrders();
     void initializeReservations();
-    void initializeInventory();
-    void clearInventoryInputs();
     int currentRow = 0;
     QComboBox *Table1_Status, *Table2_Status, *Table3_Status, *Table4_Status, *Table5_Status, *Table6_Status;
     QLineEdit *availableCount, *occupiedCount, *reservedCount;
-    int currentSelectedInventoryId = -1;
+
 
 
 };

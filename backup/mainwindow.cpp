@@ -120,8 +120,6 @@ MainWindow::MainWindow(QWidget *parent)
     initializeOrders();
     qDebug() << "Initializing reservations";
     initializeReservations();
-    qDebug() << "Initializing inventory";
-    initializeInventory();
     qDebug() << "MainWindow constructor completed";
 }
 
@@ -162,6 +160,7 @@ void MainWindow::initializeReservations() {
 
             // Add to UI table
             QTableWidget* table = ui->tableWidget_tables;
+            QTableWidgetItem* tableItem;
 
             table->insertRow(currentRow);
 
@@ -216,7 +215,6 @@ void MainWindow::on_ReservationsBtn_clicked()
 void MainWindow::on_InventoryBtn_clicked()
 {
     ui->NavigationTabs->setCurrentIndex(5);
-    loadInventoryItems();
 }
 
 void MainWindow::addOrderCards(OrderCard* card) {
@@ -422,18 +420,21 @@ void MainWindow::on_btn_reserve_clicked()
 
     // Update the reservations table
     QTableWidget* table = ui->tableWidget_tables;
+    QTableWidgetItem* tableItem;
 
     table->insertRow(currentRow);
 
     for (int i = 0; i < 6; i++) {
         switch(i) {
-        case 0: table->setItem(currentRow, i, new QTableWidgetItem(reservationName->text())); break;
-        case 1: table->setItem(currentRow, i, new QTableWidgetItem(tableNo->currentText())); break;
-        case 2: table->setItem(currentRow, i, new QTableWidgetItem(dateEdit->text())); break;
-        case 3: table->setItem(currentRow, i, new QTableWidgetItem(timeEdit->text())); break;
-        case 4: table->setItem(currentRow, i, new QTableWidgetItem(spinBox->text())); break;
-        case 5: table->setItem(currentRow, i, new QTableWidgetItem(reservationContact->text())); break;
+        case 0: tableItem = new QTableWidgetItem(reservationName->text()); break;
+        case 1: tableItem = new QTableWidgetItem(tableNo->currentText()); break;
+        case 2: tableItem = new QTableWidgetItem(dateEdit->text()); break;
+        case 3: tableItem = new QTableWidgetItem(timeEdit->text()); break;
+        case 4: tableItem = new QTableWidgetItem(spinBox->text()); break;
+        case 5: tableItem = new QTableWidgetItem(reservationContact->text()); break;
         }
+
+        table->setItem(currentRow, i, tableItem);
     }
 
     currentRow++;
@@ -726,178 +727,5 @@ void MainWindow::on_tableWidget_tables_itemDoubleClicked(QTableWidgetItem *item)
     updateTableStatusCounts();
 
     QMessageBox::information(this, "Success", "Reservation deleted successfully");
-}
-
-void MainWindow::initializeInventory() {
-    // Set up inventory table
-    ui->inventoryTable->setColumnCount(5); // ID (hidden), Item Name, Category, Quantity, Status
-    ui->inventoryTable->setHorizontalHeaderLabels(QStringList() << "ID" << "Item Name" << "Category" << "Quantity" << "Status");
-    ui->inventoryTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->inventoryTable->setColumnHidden(0, true); // Hide ID column
-    
-    // Connect the addButton in the inventory tab to our renamed slot
-    QPushButton* inventoryAddBtn = ui->addButton;
-    if (inventoryAddBtn) {
-        // Disconnect any existing connections to avoid duplicate signals
-        disconnect(inventoryAddBtn, SIGNAL(clicked()), this, SLOT(on_addButton_clicked()));
-        // Connect to our renamed slot
-        connect(inventoryAddBtn, SIGNAL(clicked()), this, SLOT(on_inventoryAddButton_clicked()));
-    }
-    
-    // Load inventory data
-    loadInventoryItems();
-    
-    // Clear input fields
-    clearInventoryInputs();
-}
-
-void MainWindow::loadInventoryItems() {
-    // Clear existing table data
-    ui->inventoryTable->setRowCount(0);
-    
-    QSqlQuery query(db);
-    if (query.exec("SELECT inventory_id, item_name, category, quantity, status FROM Inventory ORDER BY category, item_name")) {
-        int row = 0;
-        while (query.next()) {
-            ui->inventoryTable->insertRow(row);
-            
-            // Store ID in the first column (hidden)
-            ui->inventoryTable->setItem(row, 0, new QTableWidgetItem(query.value(0).toString()));
-            
-            // Display other info
-            ui->inventoryTable->setItem(row, 1, new QTableWidgetItem(query.value(1).toString()));
-            ui->inventoryTable->setItem(row, 2, new QTableWidgetItem(query.value(2).toString()));
-            ui->inventoryTable->setItem(row, 3, new QTableWidgetItem(query.value(3).toString()));
-            ui->inventoryTable->setItem(row, 4, new QTableWidgetItem(query.value(4).toString()));
-            
-            // Color-code status
-            QTableWidgetItem* statusItem = ui->inventoryTable->item(row, 4);
-            if (query.value(4).toString() == "In Stock") {
-                statusItem->setBackground(QColor("#c8e6c9")); // Light green
-            } else if (query.value(4).toString() == "Low Stock") {
-                statusItem->setBackground(QColor("#ffecb3")); // Light yellow/amber
-            }
-            
-            row++;
-        }
-    } else {
-        QMessageBox::warning(this, "Database Error", 
-            QString("Failed to load inventory items: %1").arg(query.lastError().text()));
-    }
-}
-
-void MainWindow::on_inventoryTable_itemClicked(QTableWidgetItem *item) {
-    int row = item->row();
-    
-    // Get the ID from the hidden column
-    currentSelectedInventoryId = ui->inventoryTable->item(row, 0)->text().toInt();
-    
-    // Fill form fields with selected row data
-    ui->itemNameEdit->setText(ui->inventoryTable->item(row, 1)->text());
-    ui->categoryEdit->setText(ui->inventoryTable->item(row, 2)->text());
-    ui->quantityEdit->setText(ui->inventoryTable->item(row, 3)->text());
-    
-    // Set dropdown status
-    QString status = ui->inventoryTable->item(row, 4)->text();
-    int statusIndex = ui->statusCombo->findText(status);
-    if (statusIndex >= 0) {
-        ui->statusCombo->setCurrentIndex(statusIndex);
-    }
-}
-
-void MainWindow::clearInventoryInputs() {
-    ui->itemNameEdit->clear();
-    ui->categoryEdit->clear();
-    ui->quantityEdit->clear();
-    ui->statusCombo->setCurrentIndex(0); // Default to "In Stock"
-    currentSelectedInventoryId = -1;
-}
-
-void MainWindow::on_inventoryAddButton_clicked() {
-    QString itemName = ui->itemNameEdit->text().trimmed();
-    QString category = ui->categoryEdit->text().trimmed();
-    QString quantityText = ui->quantityEdit->text().trimmed();
-    QString status = ui->statusCombo->currentText();
-    
-    // Validate inputs
-    if (itemName.isEmpty() || category.isEmpty() || quantityText.isEmpty()) {
-        QMessageBox::warning(this, "Validation Error", "Please fill in all fields.");
-        return;
-    }
-    
-    bool ok;
-    int quantity = quantityText.toInt(&ok);
-    if (!ok || quantity < 0) {
-        QMessageBox::warning(this, "Validation Error", "Quantity must be a positive number.");
-        return;
-    }
-    
-    QSqlQuery query(db);
-    
-    // If current ID is set, update existing item
-    if (currentSelectedInventoryId > 0) {
-        query.prepare("UPDATE Inventory SET item_name = ?, category = ?, quantity = ?, status = ? WHERE inventory_id = ?");
-        query.addBindValue(itemName);
-        query.addBindValue(category);
-        query.addBindValue(quantity);
-        query.addBindValue(status);
-        query.addBindValue(currentSelectedInventoryId);
-        
-        if (query.exec()) {
-            QMessageBox::information(this, "Success", "Inventory item updated successfully.");
-        } else {
-            QMessageBox::critical(this, "Database Error", 
-                QString("Failed to update inventory item: %1").arg(query.lastError().text()));
-        }
-    } else {
-        // Insert new item
-        query.prepare("INSERT INTO Inventory (item_name, category, quantity, status) VALUES (?, ?, ?, ?)");
-        query.addBindValue(itemName);
-        query.addBindValue(category);
-        query.addBindValue(quantity);
-        query.addBindValue(status);
-        
-        if (query.exec()) {
-            QMessageBox::information(this, "Success", "Inventory item added successfully.");
-        } else {
-            QMessageBox::critical(this, "Database Error", 
-                QString("Failed to add inventory item: %1").arg(query.lastError().text()));
-        }
-    }
-    
-    // Refresh inventory list and clear inputs
-    loadInventoryItems();
-    clearInventoryInputs();
-}
-
-void MainWindow::on_deleteButton_clicked() {
-    // Check if an item is selected
-    if (currentSelectedInventoryId <= 0) {
-        QMessageBox::warning(this, "Selection Error", "Please select an item to delete.");
-        return;
-    }
-    
-    // Confirm deletion
-    QMessageBox::StandardButton confirm = QMessageBox::question(this, "Confirm Deletion", 
-        "Are you sure you want to delete this inventory item?", 
-        QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
-        
-    if (confirm != QMessageBox::Yes) {
-        return;
-    }
-    
-    // Delete the item
-    QSqlQuery query(db);
-    query.prepare("DELETE FROM Inventory WHERE inventory_id = ?");
-    query.addBindValue(currentSelectedInventoryId);
-    
-    if (query.exec()) {
-        QMessageBox::information(this, "Success", "Inventory item deleted successfully.");
-        loadInventoryItems();
-        clearInventoryInputs();
-    } else {
-        QMessageBox::critical(this, "Database Error", 
-            QString("Failed to delete inventory item: %1").arg(query.lastError().text()));
-    }
 }
 
