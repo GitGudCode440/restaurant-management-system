@@ -84,13 +84,15 @@ OrderType OrderCard::convertQStringToOrderType(const QString& str) {
 }
 
 QString OrderCard::convertOrderTypeToQString(const OrderType& type) {
-    return "";
+    if (type == OrderType::TABLE) return "Table";
+    else if (type == OrderType::TAKE_OUT) return "Take Out";
+    else if (type == OrderType::DELIVERY) return "Delivery";
+    else return "Invalid";
 }
 
 
 void OrderCard::on_deleteBtn_clicked()
 {
-    // Only attempt database deletion if we have a valid order ID
     if (orderId != -1) {
         QSqlDatabase db = QSqlDatabase::database();
         QSqlQuery query(db);
@@ -103,8 +105,12 @@ void OrderCard::on_deleteBtn_clicked()
                 QString("Failed to delete order from database: %1").arg(query.lastError().text()));
             return;
         }
+
+
+
     }
-    
+
+
     delete this;
 }
 

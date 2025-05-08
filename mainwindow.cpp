@@ -247,14 +247,12 @@ void MainWindow::on_FoodFinalizeBtn_clicked()
     OrderCard* card = new OrderCard;
     OrderType type;
 
-    std::cout << deliverySelect->currentIndex() << std::endl;
 
     if (deliverySelect->currentIndex() >= 0 && deliverySelect->currentIndex() <= 2) {
         type = static_cast<OrderType>(deliverySelect->currentIndex());
     }
     else type = OrderType::INVALID;
 
-    std::cout << static_cast<int>(deliverySelect->currentIndex()) << std::endl;
 
     card->changeOrderType(type);
 
@@ -281,7 +279,7 @@ void MainWindow::on_FoodFinalizeBtn_clicked()
         return;
     }
 
-    query.bindValue(":type", static_cast<int>(card->getOrderType()));
+    query.bindValue(":type", OrderCard::convertOrderTypeToQString(card->getOrderType()));
     query.bindValue(":details", card->getDetailsText());
     query.bindValue(":price", card->getOrderPrice());
 
