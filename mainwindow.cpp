@@ -801,32 +801,32 @@ void MainWindow::on_pushButton_4_clicked()
 }
 
 // Add these methods to handle window dragging
-void MainWindow::mousePressEvent(QMouseEvent* event)
-{
-    if (event->button() == Qt::LeftButton) {
-        // Check if the click position is in the header area
-        if (event->pos().y() < 50) {
-            dragPosition = event->globalPosition().toPoint() - frameGeometry().topLeft();
-            event->accept();
-        }
-    }
-}
+// void MainWindow::mousePressEvent(QMouseEvent* event)
+// {
+//     if (event->button() == Qt::LeftButton) {
+//         // Check if the click position is in the header area
+//         if (event->pos().y() < 50) {
+//             dragPosition = event->globalPosition().toPoint() - frameGeometry().topLeft();
+//             event->accept();
+//         }
+//     }
+// }
 
-void MainWindow::mouseMoveEvent(QMouseEvent* event)
-{
-    if (event->buttons() & Qt::LeftButton) {
-        // Only move if the drag started in the header area
-        if (!dragPosition.isNull()) {
-            move(event->globalPosition().toPoint() - dragPosition);
-            event->accept();
-        }
-    }
-}
+// void MainWindow::mouseMoveEvent(QMouseEvent* event)
+// {
+//     if (event->buttons() & Qt::LeftButton) {
+//         // Only move if the drag started in the header area
+//         if (!dragPosition.isNull()) {
+//             move(event->globalPosition().toPoint() - dragPosition);
+//             event->accept();
+//         }
+//     }
+// }
 
-void MainWindow::mouseReleaseEvent(QMouseEvent* event)
-{
-    // Reset dragPosition when mouse is released
-    dragPosition = QPoint();
-    event->accept();
-}
+// void MainWindow::mouseReleaseEvent(QMouseEvent* event)
+// {
+//     // Reset dragPosition when mouse is released
+//     dragPosition = QPoint();
+//     event->accept();
+// }
 
