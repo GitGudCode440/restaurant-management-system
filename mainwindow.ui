@@ -735,7 +735,7 @@ padding: 5px;</string>
             </widget>
            </item>
            <item>
-            <widget class="QWidget" name="widget" native="true">
+            <widget class="QWidget" name="TableGrid" native="true">
              <layout class="QGridLayout" name="gridLayout">
               <item row="1" column="2">
                <widget class="QFrame" name="Table6">
@@ -2545,8 +2545,11 @@ padding: 5px;</string>
                <property name="styleSheet">
                 <string notr="true">color: black;</string>
                </property>
+               <property name="keyboardTracking">
+                <bool>false</bool>
+               </property>
                <property name="displayFormat">
-                <string>dd/mm/yyyy</string>
+                <string>dd/M/yy</string>
                </property>
                <property name="calendarPopup">
                 <bool>true</bool>
@@ -2813,9 +2816,9 @@ QComboBox QAbstractItemView {
               </spacer>
              </item>
              <item>
-              <widget class="QPushButton" name="btn_check">
+              <widget class="QPushButton" name="reservation_btn_delete">
                <property name="text">
-                <string>Check Availability</string>
+                <string>Delete Reservation</string>
                </property>
               </widget>
              </item>
