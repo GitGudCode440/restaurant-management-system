@@ -606,6 +606,9 @@ QComboBox QAbstractItemView {
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
     /* Custom style or reset styles */
@@ -636,6 +639,9 @@ QComboBox QAbstractItemView {
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
     /* Custom style or reset styles */
@@ -662,6 +668,9 @@ QComboBox QAbstractItemView {
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
+                  </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
@@ -1898,8 +1907,8 @@ QPushButton:pressed {
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>753</width>
-                   <height>170</height>
+                   <width>100</width>
+                   <height>30</height>
                   </rect>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_24">
