@@ -59,21 +59,30 @@ private slots:
     void on_pushButton_3_clicked(); // Maximize/Restore
     void on_pushButton_4_clicked(); // Close
     
-    void updateTableStatus(int tableId, const QString& status);
     void loadMenuItems();
-
 
     void on_tableWidget_tables_itemDoubleClicked(QTableWidgetItem *item);
 
 private:
     Ui::MainWindow *ui;
+    QSqlDatabase db;
+
+    void setComboBoxColor(QComboBox *comboBox, const QString &status);
+    void loadTableStatuses();
+    void updateTableStatus(int tableId, const QString& status);
+
+
     void addOrderCards(OrderCard* card);
     void addOrder(OrderCard* card, int id = -1);
     void createMenuItemCard(const QString& name, const QString& description, const QString& price);
+
     void initializeOrders();
     void initializeReservations();
+
+
     int currentRow = 0;
     int orderCount = 0;
+
     QPoint dragPosition;
     QComboBox *Table1_Status, *Table2_Status, *Table3_Status, *Table4_Status, *Table5_Status, *Table6_Status;
     QLineEdit *availableCount, *occupiedCount, *reservedCount;

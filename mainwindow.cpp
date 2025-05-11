@@ -108,10 +108,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     updateTableStatusCounts();
 
-    // Initialize order count
-    orderCount = 0;
-    // Show "No orders in progress" by default
-    ui->noOrdersLabel->setVisible(true);
+
     qDebug() << "Setting up combo box colors";
     QList<QComboBox*> combos = ui->TableGrid->findChildren<QComboBox*>();
     for(QComboBox* combo : combos) {
@@ -132,6 +129,11 @@ MainWindow::MainWindow(QWidget *parent)
     qDebug() << "Initializing reservations";
     initializeReservations();
     qDebug() << "MainWindow constructor completed";
+
+    if (orderCount > 0)
+        ui->noOrdersLabel->setVisible(false);
+    else
+        ui->noOrdersLabel->setVisible(true);
 }
 
 void MainWindow::initializeOrders() {
@@ -153,6 +155,7 @@ void MainWindow::initializeOrders() {
             card->addTextToListWidget(orderDetails);
 
             addOrder(card, id);
+            orderCount++;
         }
     }
 }
@@ -171,7 +174,6 @@ void MainWindow::initializeReservations() {
 
             // Add to UI table
             QTableWidget* table = ui->tableWidget_tables;
-            QTableWidgetItem* tableItem;
 
             table->insertRow(currentRow);
 
@@ -492,13 +494,13 @@ void MainWindow::on_addButton_clicked()
 
     // Insert into database
     QSqlQuery query(db);
-    query.prepare("INSERT INTO Menu (item_name, category, price, description) "
-                 "VALUES (:name, :category, :price, :description)");
+    query.prepare("INSERT INTO Inventory (item_name, category, quantity, status) "
+                 "VALUES (:name, :category, :price, :status)");
     
     query.bindValue(":name", itemNameEdit->text());
     query.bindValue(":category", categoryEdit->text());
     query.bindValue(":price", price);
-    query.bindValue(":description", statusCombo->currentText());  // Using statusCombo for description
+    query.bindValue(":status", statusCombo->currentText());  // Using statusCombo for description
 
     if (!query.exec()) {
         QMessageBox::critical(nullptr, "Database Error", 
@@ -587,53 +589,11 @@ void MainWindow::updateTableStatus(int tableId, const QString& status) {
     }
 }
 
-void MainWindow::updateTableStatusCounts()
-{
-    int available = 0;
-    int occupied = 0;
-    int reserved = 0;
-
-    // Check the status of each table and update counts
-    if (Table1_Status->currentText() == "Available") available++;
-    if (Table1_Status->currentText() == "Occupied") occupied++;
-    if (Table1_Status->currentText() == "Reserved") reserved++;
-    updateTableStatus(1, Table1_Status->currentText());
-
-    if (Table2_Status->currentText() == "Available") available++;
-    if (Table2_Status->currentText() == "Occupied") occupied++;
-    if (Table2_Status->currentText() == "Reserved") reserved++;
-    updateTableStatus(2, Table2_Status->currentText());
-
-    if (Table3_Status->currentText() == "Available") available++;
-    if (Table3_Status->currentText() == "Occupied") occupied++;
-    if (Table3_Status->currentText() == "Reserved") reserved++;
-    updateTableStatus(3, Table3_Status->currentText());
-
-    if (Table4_Status->currentText() == "Available") available++;
-    if (Table4_Status->currentText() == "Occupied") occupied++;
-    if (Table4_Status->currentText() == "Reserved") reserved++;
-    updateTableStatus(4, Table4_Status->currentText());
-
-    if (Table5_Status->currentText() == "Available") available++;
-    if (Table5_Status->currentText() == "Occupied") occupied++;
-    if (Table5_Status->currentText() == "Reserved") reserved++;
-    updateTableStatus(5, Table5_Status->currentText());
-
-    if (Table6_Status->currentText() == "Available") available++;
-    if (Table6_Status->currentText() == "Occupied") occupied++;
-    if (Table6_Status->currentText() == "Reserved") reserved++;
-    updateTableStatus(6, Table6_Status->currentText());
-
-    // Update the line edits with the new counts
-    availableCount->setText(QString::number(available));
-    occupiedCount->setText(QString::number(occupied));
-    reservedCount->setText(QString::number(reserved));
-}
 
 void MainWindow::loadMenuItems()
 {
     QSqlQuery query(db);
-    if (!query.exec("SELECT item_name, category, price, description FROM Menu ORDER BY category, item_name")) {
+    if (!query.exec("SELECT food_name, food_price FROM Menu ORDER by food_name")) {
         QMessageBox::warning(nullptr, "Database Error", 
             QString("Failed to load menu items: %1").arg(query.lastError().text()));
         return;
@@ -743,50 +703,6 @@ void MainWindow::on_tableWidget_tables_itemDoubleClicked(QTableWidgetItem *item)
     QMessageBox::information(this, "Success", "Reservation deleted successfully");
 }
 
-void MainWindow::on_addButton_clicked()
-{
-    // Get references to your input fields
-    QLineEdit* itemNameEdit = ui->itemNameEdit;
-    QLineEdit* categoryEdit = ui->categoryEdit;
-    QLineEdit* quantityEdit = ui->quantityEdit;
-    QComboBox* statusCombo = ui->statusCombo;
-    QTableWidget* table = ui->inventoryTable;
-
-    // Skip adding if required fields are empty
-    if (itemNameEdit->text().isEmpty() || categoryEdit->text().isEmpty() || quantityEdit->text().isEmpty()) {
-        return;
-    }
-
-    // Create new items for the table
-    QTableWidgetItem* tableItem;
-
-    // Add a new row
-    int currentRow = table->rowCount();
-    table->insertRow(currentRow);
-
-    // Fill in the cells
-    for (int i = 0; i < 4; i++) {
-        switch(i) {
-        case 0: tableItem = new QTableWidgetItem(itemNameEdit->text()); break;
-        case 1: tableItem = new QTableWidgetItem(categoryEdit->text()); break;
-        case 2: tableItem = new QTableWidgetItem(quantityEdit->text()); break;
-        case 3: tableItem = new QTableWidgetItem(statusCombo->currentText()); break;
-        }
-        table->setItem(currentRow, i, tableItem);
-    }
-
-    // Ensure columns maintain their width
-    table->setColumnWidth(0, 150); // Item Name
-    table->setColumnWidth(1, 150); // Category
-    table->setColumnWidth(2, 100); // Quantity
-    // Status column will stretch due to horizontalHeaderStretchLastSection
-
-    // Clear input fields after adding
-    itemNameEdit->clear();
-    categoryEdit->clear();
-    quantityEdit->clear();
-    statusCombo->setCurrentIndex(0); // Reset to default value
-}
 
 void MainWindow::updateTableStatusCounts()
 {
@@ -798,31 +714,38 @@ void MainWindow::updateTableStatusCounts()
     if (Table1_Status->currentText() == "Available") available++;
     if (Table1_Status->currentText() == "Occupied") occupied++;
     if (Table1_Status->currentText() == "Reserved") reserved++;
+    updateTableStatus(1, Table1_Status->currentText());
 
     if (Table2_Status->currentText() == "Available") available++;
     if (Table2_Status->currentText() == "Occupied") occupied++;
     if (Table2_Status->currentText() == "Reserved") reserved++;
+    updateTableStatus(2, Table2_Status->currentText());
 
     if (Table3_Status->currentText() == "Available") available++;
     if (Table3_Status->currentText() == "Occupied") occupied++;
     if (Table3_Status->currentText() == "Reserved") reserved++;
+    updateTableStatus(3, Table3_Status->currentText());
 
     if (Table4_Status->currentText() == "Available") available++;
     if (Table4_Status->currentText() == "Occupied") occupied++;
     if (Table4_Status->currentText() == "Reserved") reserved++;
+    updateTableStatus(4, Table4_Status->currentText());
 
     if (Table5_Status->currentText() == "Available") available++;
     if (Table5_Status->currentText() == "Occupied") occupied++;
     if (Table5_Status->currentText() == "Reserved") reserved++;
+    updateTableStatus(5, Table5_Status->currentText());
 
     if (Table6_Status->currentText() == "Available") available++;
     if (Table6_Status->currentText() == "Occupied") occupied++;
     if (Table6_Status->currentText() == "Reserved") reserved++;
+    updateTableStatus(6, Table6_Status->currentText());
 
     // Update the line edits with the new counts
     availableCount->setText(QString::number(available));
     occupiedCount->setText(QString::number(occupied));
     reservedCount->setText(QString::number(reserved));
+
 }
 
 void MainWindow::on_AdditemBtn_clicked()
