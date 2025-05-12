@@ -81,12 +81,51 @@ OrderType OrderCard::convertQStringToOrderType(const QString& str) {
 }
 
 QString OrderCard::convertOrderTypeToQString(const OrderType& type) {
-    return "";
+    if (type == OrderType::TABLE) return "Table";
+    else if (type == OrderType::TAKE_OUT) return "Take Out";
+    else if (type == OrderType::DELIVERY) return "Delivery";
+    else return "Invalid";
 }
+
+void OrderCard::changeOrderStatus(const QString& status) {
+    if (status == "Delivered") ui->OrderStatusSelect->setCurrentIndex(2);
+    else if (status == "Out for Delivery") ui->OrderStatusSelect->setCurrentIndex(1);
+    else ui->OrderStatusSelect->setCurrentIndex(0);
+}
+
 
 
 void OrderCard::on_deleteBtn_clicked()
 {
-    delete this;
+    QSqlQuery query("DELETE FROM Orders WHERE order_id = ?;");
+    query.addBindValue(orderId);
+
+    if (!query.exec()) {
+        QMessageBox::critical(this, "Database Error", QString("Failed to delete order: %1").arg(query.lastError().text()));
+        return;
+    }
+
+    this->deleteLater();
+}
+
+
+void OrderCard::on_OrderStatusSelect_currentIndexChanged(int index)
+{
+    QSqlQuery query("UPDATE Orders SET order_status = ? WHERE order_id = ?");
+    QString orderStatus;
+
+    switch(index) {
+    case 0: orderStatus = "Being Prepared"; break;
+    case 1: orderStatus = "Out for Delivery"; break;
+    case 2: orderStatus = "Delivered"; break;
+    }
+
+    query.addBindValue(orderStatus);
+    query.addBindValue(orderId);
+
+    if (!query.exec()) {
+        QMessageBox::critical(this, "Database Error", QString("Failed to modify status of order: %1").arg(query.lastError().text()));
+        return;
+    }
 }
 

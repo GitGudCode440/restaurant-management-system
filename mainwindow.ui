@@ -716,9 +716,12 @@ QComboBox QAbstractItemView {
        <item>
         <widget class="QStackedWidget" name="NavigationTabs">
          <property name="currentIndex">
-          <number>0</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="Tables">
+          <property name="styleSheet">
+           <string notr="true">color: black;</string>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <item alignment="Qt::AlignmentFlag::AlignTop">
             <widget class="QLabel" name="label_5">
@@ -1544,6 +1547,9 @@ QComboBox QAbstractItemView {
                  <bold>true</bold>
                 </font>
                </property>
+               <property name="styleSheet">
+                <string notr="true">color: black;</string>
+               </property>
                <property name="text">
                 <string>Available :</string>
                </property>
@@ -1596,6 +1602,9 @@ QComboBox QAbstractItemView {
                  <bold>true</bold>
                 </font>
                </property>
+               <property name="styleSheet">
+                <string notr="true">color: black;</string>
+               </property>
                <property name="text">
                 <string>Occupied :</string>
                </property>
@@ -1647,6 +1656,9 @@ QComboBox QAbstractItemView {
                  <pointsize>12</pointsize>
                  <bold>true</bold>
                 </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">color: black;</string>
                </property>
                <property name="text">
                 <string>Reserved :</string>
@@ -1907,8 +1919,8 @@ QPushButton:pressed {
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>100</width>
-                   <height>30</height>
+                   <width>64</width>
+                   <height>147</height>
                   </rect>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_24">
@@ -2954,9 +2966,6 @@ QHeaderView::section {
 }
 </string>
              </property>
-             <property name="horizontalScrollBarPolicy">
-              <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
-             </property>
              <property name="editTriggers">
               <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
              </property>
@@ -2965,9 +2974,6 @@ QHeaderView::section {
              </property>
              <property name="selectionMode">
               <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
-             </property>
-             <property name="selectionBehavior">
-              <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
              </property>
              <attribute name="horizontalHeaderMinimumSectionSize">
               <number>100</number>

@@ -53,6 +53,7 @@ private slots:
     void on_addButton_clicked();
     void on_AdditemBtn_clicked();
     void on_btn_reserve_clicked();
+    void on_tableStatusChanged(int tableId, const QString& newStatus);
     
     // Window control buttons
     void on_pushButton_2_clicked(); // Minimize
@@ -63,22 +64,23 @@ private slots:
 
     void on_tableWidget_tables_itemDoubleClicked(QTableWidgetItem *item);
 
+    void on_deleteButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
 
     void setComboBoxColor(QComboBox *comboBox, const QString &status);
-    void loadTableStatuses();
     void updateTableStatus(int tableId, const QString& status);
 
-
-    void addOrderCards(OrderCard* card);
     void addOrder(OrderCard* card, int id = -1);
     void createMenuItemCard(const QString& name, const QString& description, const QString& price);
 
     void initializeOrders();
     void initializeReservations();
-
+    void initializeTables();
+    void initializeInventory();
+    void initializeFoodItems();
 
     int currentRow = 0;
     int orderCount = 0;

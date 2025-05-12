@@ -12,16 +12,29 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     qDebug() << "Starting MainWindow constructor";
-    qDebug() << "Available database drivers:" << QSqlDatabase::drivers();
     
     ui->setupUi(this);
     
     // Set up frameless window
     this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+
+    ui->dateEdit_date->setDate(QDate::currentDate());
+    ui->timeEdit_time->setTime(QTime::currentTime());
     
-    // Initialize combo boxes and line edits
+    // Initialize UI elements
+    availableCount = ui->availableCount;
+    occupiedCount = ui->occupiedCount;
+    reservedCount = ui->reservedCount;
 
+    // Initialize table status combo boxes
+    Table1_Status = ui->Table1_Status;
+    Table2_Status = ui->Table2_Status;
+    Table3_Status = ui->Table3_Status;
+    Table4_Status = ui->Table4_Status;
+    Table5_Status = ui->Table5_Status;
+    Table6_Status = ui->Table6_Status;
 
+    // Setup database connection
     qDebug() << "Setting up database connection";
     db = QSqlDatabase::addDatabase("QMYSQL");
     db.setHostName("127.0.0.1");
@@ -32,111 +45,46 @@ MainWindow::MainWindow(QWidget *parent)
 
     qDebug() << "Attempting to open database connection";
     if (!db.open()) {
-        qDebug() << "Database connection failed:" << db.lastError().text();
-        QMessageBox::critical(nullptr, "Database Error", 
+        QMessageBox::critical(this, "Database Error", 
             QString("Unable to connect to database: %1").arg(db.lastError().text()));
         return;
     }
     qDebug() << "Database connection successful";
 
-    // Verify database connection
-    QSqlQuery testQuery(db);
-    qDebug() << "Testing database connection";
-    if (!testQuery.exec("SELECT 1")) {
-        qDebug() << "Database connection test failed:" << testQuery.lastError().text();
-        QMessageBox::critical(nullptr, "Database Error", 
-            QString("Database connection test failed: %1").arg(testQuery.lastError().text()));
-        return;
-    }
-    qDebug() << "Database connection test successful";
-
-    // Initialize tables if they don't exist
-    QSqlQuery query(db);
-    
-    qDebug() << "Creating Tables table if not exists";
-    if (!query.exec("CREATE TABLE IF NOT EXISTS Tables ("
-                   "table_id INT PRIMARY KEY, "
-                   "status VARCHAR(20) NOT NULL)")) {
-        QMessageBox::critical(nullptr, "Database Error", 
-            QString("Failed to create Tables table: %1").arg(query.lastError().text()));
-        return;
-    }
-    qDebug() << "Tables table created/verified";
-    
-    // Create Orders table if it doesn't exist
-    if (!query.exec("CREATE TABLE IF NOT EXISTS Orders ("
-                   "order_id INT AUTO_INCREMENT PRIMARY KEY, "
-                   "order_type VARCHAR(20) NOT NULL, "
-                   "order_details TEXT NOT NULL, "
-                   "order_price FLOAT NOT NULL, "
-                   "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)")) {
-        QMessageBox::critical(nullptr, "Database Error", 
-            QString("Failed to create Orders table: %1").arg(query.lastError().text()));
-        return;
-    }
-    qDebug() << "Orders table created/verified";
-    
-    // Initialize table statuses if they don't exist
-    for (int i = 1; i <= 6; i++) {
-        query.prepare("INSERT IGNORE INTO Tables (table_id, status) VALUES (?, 'Available')");
-        query.addBindValue(i);
-        if (!query.exec()) {
-            QMessageBox::warning(nullptr, "Database Warning", 
-                QString("Failed to initialize table %1: %2").arg(i).arg(query.lastError().text()));
-        }
-    }
-    qDebug() << "Table statuses initialized";
-    
-    qDebug() << "Setting up UI elements";
-    Table1_Status = ui->Table1_Status;
-    Table2_Status = ui->Table2_Status;
-    Table3_Status = ui->Table3_Status;
-    Table4_Status = ui->Table4_Status;
-    Table5_Status = ui->Table5_Status;
-    Table6_Status = ui->Table6_Status;
-
-    availableCount = ui->availableCount;
-    occupiedCount = ui->occupiedCount;
-    reservedCount = ui->reservedCount;
-
-    connect(Table1_Status, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTableStatusCounts()));
-    connect(Table2_Status, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTableStatusCounts()));
-    connect(Table3_Status, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTableStatusCounts()));
-    connect(Table4_Status, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTableStatusCounts()));
-    connect(Table5_Status, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTableStatusCounts()));
-    connect(Table6_Status, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTableStatusCounts()));
-
-    updateTableStatusCounts();
-
-
-    qDebug() << "Setting up combo box colors";
+    // Setup combo box connections
+    qDebug() << "Setting up combo box connections";
     QList<QComboBox*> combos = ui->TableGrid->findChildren<QComboBox*>();
-    for(QComboBox* combo : combos) {
-        connect(
-            combo,
-            QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this,
-            [this, combo](int index) {
-                setComboBoxColor(combo, combo->itemText(index));
+    for(QComboBox* combo : std::as_const(combos)) {
+        // Extract table ID from combo box name (e.g., "Table1_Status" -> 1)
+        QString name = combo->objectName();
+        int tableId = name.mid(5, 1).toInt();  // Extract the number after "Table"
+        
+        connect(combo, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+            [this, combo, tableId](int index) {
+                QString newStatus = combo->itemText(index);
+                on_tableStatusChanged(tableId, newStatus);
             }
         );
     }
 
+    // Load initial data
     qDebug() << "Loading initial table statuses";
-    loadTableStatuses();
-    qDebug() << "Initializing orders";
-    initializeOrders();
-    qDebug() << "Initializing reservations";
-    initializeReservations();
-    qDebug() << "MainWindow constructor completed";
+    initializeTables();
+    updateTableStatusCounts();
 
-    if (orderCount > 0)
-        ui->noOrdersLabel->setVisible(false);
-    else
-        ui->noOrdersLabel->setVisible(true);
+    initializeOrders();
+    initializeReservations();
+    initializeInventory();
+    initializeFoodItems();
+
+    loadMenuItems();
+    
+    qDebug() << "MainWindow constructor completed successfully";
+
 }
 
 void MainWindow::initializeOrders() {
+    ui->noOrdersLabel->setVisible(true);
     QSqlQuery query(db);
 
     if (query.exec("SELECT * FROM Orders;")) {
@@ -145,17 +93,24 @@ void MainWindow::initializeOrders() {
         while(query.next()) {
             int id = query.value(0).toInt();
             QString orderType = query.value(1).toString();
-            QString orderDetails = query.value(2).toString();
-            float orderPrice = query.value(3).toFloat();
+            QString orderStatus = query.value(2).toString();
+            QString orderDetails = query.value(3).toString();
+            float orderPrice = query.value(4).toFloat();
 
 
             OrderCard* card = new OrderCard;
             card->changeOrderType(OrderCard::convertQStringToOrderType(orderType));
+            card->changeOrderStatus(orderStatus);
             card->changeOrderPrice(orderPrice);
             card->addTextToListWidget(orderDetails);
 
+            connect(card, &QObject::destroyed, this, [this]() {
+                orderCount--;
+                ui->noOrdersLabel->setVisible(orderCount <= 0);
+            });
+
             addOrder(card, id);
-            orderCount++;
+            ui->noOrdersLabel->setVisible(false);
         }
     }
 }
@@ -207,7 +162,7 @@ void MainWindow::on_TablesBtn_clicked()
 void MainWindow::on_MenuBtn_clicked()
 {
     ui->NavigationTabs->setCurrentIndex(1);
-    loadMenuItems();  // Load menu items when switching to Menu tab
+    loadMenuItems();  // Reload menu items when switching to Menu tab
 }
 
 void MainWindow::on_OrdersBtn_clicked()
@@ -230,22 +185,14 @@ void MainWindow::on_InventoryBtn_clicked()
     ui->NavigationTabs->setCurrentIndex(5);
 }
 
-void MainWindow::addOrderCards(OrderCard* card) {
-    ui->OrderListLayout->addWidget(card);
-    orderCount++;
-    
-    // Hide "No orders in progress" label when an order is added
-    ui->noOrdersLabel->setVisible(false);
-}
 
 void MainWindow::addOrder(OrderCard* card, int id) {
-
-
-
-
-    QString orderId = QString("Order #%1").arg(id);
+    orderCount++;
+    QString orderId = QString("Order #%1").arg(orderCount);
+    card->setId(id);
     card->changeOrderLabelText(orderId);
     ui->OrderListLayout->addWidget(card);
+    ui->noOrdersLabel->setVisible(false);
 }
 
 void MainWindow::on_FoodAddBtn_clicked()
@@ -253,20 +200,31 @@ void MainWindow::on_FoodAddBtn_clicked()
     QComboBox* foodItemSelect = ui->FoodItemSelect;
     QComboBox* foodQuantitySelect = ui->FoodQuantitySelect;
 
+    // Add the selected item and quantity to the list widget
     ui->FoodListWidget->addItem(
         QString("%1 %2")
             .arg(foodQuantitySelect->currentText(), foodItemSelect->currentText())
-        );
+    );
 }
-
 
 void MainWindow::on_FoodFinalizeBtn_clicked()
 {
-
     QListWidget* listWidget = ui->FoodListWidget;
     QComboBox* deliverySelect = ui->DeliveryTypeSelect;
 
+    // Only proceed if there are items in the list
+    if (listWidget->count() == 0) {
+        QMessageBox::warning(nullptr, "Warning", "Please add items before finalizing the order");
+        return;
+    }
+
     OrderCard* card = new OrderCard;
+
+    connect(card, &QObject::destroyed, this, [this]() {
+        orderCount--;
+        ui->noOrdersLabel->setVisible(orderCount <= 0);
+    });
+
     OrderType type;
 
     if (deliverySelect->currentIndex() >= 0 && deliverySelect->currentIndex() <= 2) {
@@ -277,31 +235,51 @@ void MainWindow::on_FoodFinalizeBtn_clicked()
     card->changeOrderType(type);
 
     QString str = "";
+    float totalPrice = 0.0;
     int count = listWidget->count();
+    
     for (int i = 0; i < count; ++i) {
         QListWidgetItem *item = listWidget->item(i);
-        str += item->text() + ", ";
+        QString itemText = item->text();
+        
+        // Extract quantity and price from the item text
+        // Format is "1x Chicken Tandoori - $12.99"
+        QStringList parts = itemText.split(" - $");
+        if (parts.size() == 2) {
+            // Get the quantity and food name from the first part
+            QString firstPart = parts[0];  // This contains "1x Chicken Tandoori"
+            float itemPrice = parts[1].toFloat();
+            
+            // Calculate total price
+            int quantity = firstPart.split("x")[0].trimmed().toInt();
+            totalPrice += quantity * itemPrice;
 
+            // Add the quantity and food name to the string
+            str += firstPart;
+            if (i < count - 1) {
+                str += ", ";
+            }
+        }
     }
+    
     card->changeDetailsText(str);
-    card->changeOrderPrice(0);
-
-    addOrder(card);
+    card->changeOrderPrice(totalPrice);
 
     QSqlQuery query(db);
     
     if (!query.prepare(
-        "INSERT INTO Orders (order_type, order_details, order_price) "
-        "VALUES (:type, :details, :price);"
+        "INSERT INTO Orders (order_type, order_status, order_details, order_price) "
+        "VALUES (:type, :status, :details, :price);"
     )) {
         QMessageBox::critical(nullptr, "Database Error", 
             QString("Failed to prepare order insertion: %1").arg(query.lastError().text()));
         return;
     }
 
-    query.bindValue(":type", static_cast<int>(card->getOrderType()));
+    query.bindValue(":type", OrderCard::convertOrderTypeToQString(card->getOrderType()));
+    query.bindValue(":status", "Being Prepared");
     query.bindValue(":details", card->getDetailsText());
-    query.bindValue(":price", card->getOrderPrice());
+    query.bindValue(":price", totalPrice);
 
     if (!query.exec()) {
         QMessageBox::critical(nullptr, "Database Error", 
@@ -310,10 +288,14 @@ void MainWindow::on_FoodFinalizeBtn_clicked()
     }
 
     int newOrderId = query.lastInsertId().toInt();
+
+    card->setId(newOrderId);
     
     addOrder(card, newOrderId);
 
+    // Clear the list widget after finalizing
     listWidget->clear();
+    ui->noOrdersLabel->setVisible(false);
 }
 
 
@@ -330,11 +312,11 @@ void MainWindow::on_LogoutBtn_clicked()
 void MainWindow::setComboBoxColor(QComboBox *comboBox, const QString &status)
 {
     if (status == "Available") {
-        comboBox->setStyleSheet("QComboBox { background-color: green;  }");
+        comboBox->setStyleSheet("QComboBox { background-color: green; color: white; }");
     } else if (status == "Occupied") {
-        comboBox->setStyleSheet("QComboBox { background-color: red; }");
+        comboBox->setStyleSheet("QComboBox { background-color: red; color: white; }");
     } else if (status == "Reserved") {
-        comboBox->setStyleSheet("QComboBox { background-color: orange; } ");
+        comboBox->setStyleSheet("QComboBox { background-color: orange; color: white; }");
     } else {
         comboBox->setStyleSheet(""); // Reset to default
     }
@@ -533,20 +515,10 @@ void MainWindow::on_addButton_clicked()
     loadMenuItems();
 }
 
-void MainWindow::loadTableStatuses() {
-    if (!db.isOpen()) {
-        QMessageBox::critical(nullptr, "Database Error", "Database connection is not open");
-        return;
-    }
-
+void MainWindow::initializeTables() {
     QSqlQuery query(db);
     query.prepare("SELECT table_id, status FROM Tables ORDER BY table_id");
-    
-    if (!query.exec()) {
-        QMessageBox::warning(nullptr, "Database Warning", 
-            QString("Failed to load table statuses: %1").arg(query.lastError().text()));
-        return;
-    }
+    query.exec();
 
     while (query.next()) {
         int tableId = query.value(0).toInt();
@@ -572,60 +544,90 @@ void MainWindow::loadTableStatuses() {
     }
 }
 
-void MainWindow::updateTableStatus(int tableId, const QString& status) {
-    if (!db.isOpen()) {
-        QMessageBox::critical(nullptr, "Database Error", "Database connection is not open");
-        return;
+void MainWindow::updateTableStatusCounts()
+{
+    QSqlQuery query(db);
+    query.prepare("SELECT status, COUNT(*) as count FROM Tables GROUP BY status");
+    query.exec();
+
+    int available = 0;
+    int occupied = 0;
+    int reserved = 0;
+
+    while (query.next()) {
+        QString status = query.value(0).toString();
+        int count = query.value(1).toInt();
+        
+        if (status == "Available") available = count;
+        else if (status == "Occupied") occupied = count;
+        else if (status == "Reserved") reserved = count;
     }
 
-    QSqlQuery query(db);
-    query.prepare("UPDATE Tables SET status = ? WHERE table_id = ?");
-    query.addBindValue(status);
-    query.addBindValue(tableId);
-    
-    if (!query.exec()) {
-        QMessageBox::warning(nullptr, "Database Warning", 
-            QString("Failed to update table %1 status: %2").arg(tableId).arg(query.lastError().text()));
-    }
+    // Update the line edits with the new counts
+    availableCount->setText(QString::number(available));
+    occupiedCount->setText(QString::number(occupied));
+    reservedCount->setText(QString::number(reserved));
 }
 
+void MainWindow::on_tableStatusChanged(int tableId, const QString& newStatus)
+{
+    // Update database
+    QSqlQuery query(db);
+    query.prepare("UPDATE Tables SET status = ? WHERE table_id = ?");
+    query.addBindValue(newStatus);
+    query.addBindValue(tableId);
+    query.exec();
+
+    // Update UI
+    QComboBox* tableStatusCombo = nullptr;
+    switch (tableId) {
+        case 1: tableStatusCombo = Table1_Status; break;
+        case 2: tableStatusCombo = Table2_Status; break;
+        case 3: tableStatusCombo = Table3_Status; break;
+        case 4: tableStatusCombo = Table4_Status; break;
+        case 5: tableStatusCombo = Table5_Status; break;
+        case 6: tableStatusCombo = Table6_Status; break;
+    }
+
+    if (tableStatusCombo) {
+        setComboBoxColor(tableStatusCombo, newStatus);
+    }
+
+    // Update counts
+    updateTableStatusCounts();
+}
 
 void MainWindow::loadMenuItems()
 {
     QSqlQuery query(db);
-    if (!query.exec("SELECT food_name, food_price FROM Menu ORDER by food_name")) {
+    if (!query.exec("SELECT food_name, food_price FROM Menu ORDER BY food_name")) {
         QMessageBox::warning(nullptr, "Database Error", 
             QString("Failed to load menu items: %1").arg(query.lastError().text()));
         return;
     }
 
-    // Clear existing items
-    ui->FoodListWidget->clear();
+    // Clear existing items from the combo box and menu items layout
+    ui->FoodItemSelect->clear();
+    QLayout* menuLayout = ui->menuItemsLayout;
+    if (menuLayout) {
+        QLayoutItem* item;
+        while ((item = menuLayout->takeAt(0)) != nullptr) {
+            if (item->widget()) {
+                delete item->widget();
+            }
+            delete item;
+        }
+    }
 
-    QString currentCategory;
     while (query.next()) {
-        QString itemName = query.value(0).toString();
-        QString category = query.value(1).toString();
-        float price = query.value(2).toFloat();
-        QString description = query.value(3).toString();
+        QString foodName = query.value(0).toString();
+        float price = query.value(1).toFloat();
 
-        // Add category header if it's a new category
-        if (category != currentCategory) {
-            currentCategory = category;
-            QListWidgetItem* categoryItem = new QListWidgetItem(category);
-            categoryItem->setBackground(QColor("#E0E0E0"));
-            categoryItem->setFlags(categoryItem->flags() & ~Qt::ItemIsSelectable);
-            ui->FoodListWidget->addItem(categoryItem);
-        }
-
-        // Create menu item text
-        QString itemText = QString("%1 - $%2").arg(itemName).arg(price, 0, 'f', 2);
-        if (!description.isEmpty()) {
-            itemText += QString("\n    %1").arg(description);
-        }
-
-        QListWidgetItem* item = new QListWidgetItem(itemText);
-        ui->FoodListWidget->addItem(item);
+        // Add item to the combo box
+        ui->FoodItemSelect->addItem(QString("%1 - $%2").arg(foodName).arg(price, 0, 'f', 2));
+        
+        // Create and add menu item card
+        createMenuItemCard(foodName, "", QString::number(price, 'f', 2));
     }
 }
 
@@ -703,51 +705,6 @@ void MainWindow::on_tableWidget_tables_itemDoubleClicked(QTableWidgetItem *item)
     QMessageBox::information(this, "Success", "Reservation deleted successfully");
 }
 
-
-void MainWindow::updateTableStatusCounts()
-{
-    int available = 0;
-    int occupied = 0;
-    int reserved = 0;
-
-    // Check the status of each table and update counts
-    if (Table1_Status->currentText() == "Available") available++;
-    if (Table1_Status->currentText() == "Occupied") occupied++;
-    if (Table1_Status->currentText() == "Reserved") reserved++;
-    updateTableStatus(1, Table1_Status->currentText());
-
-    if (Table2_Status->currentText() == "Available") available++;
-    if (Table2_Status->currentText() == "Occupied") occupied++;
-    if (Table2_Status->currentText() == "Reserved") reserved++;
-    updateTableStatus(2, Table2_Status->currentText());
-
-    if (Table3_Status->currentText() == "Available") available++;
-    if (Table3_Status->currentText() == "Occupied") occupied++;
-    if (Table3_Status->currentText() == "Reserved") reserved++;
-    updateTableStatus(3, Table3_Status->currentText());
-
-    if (Table4_Status->currentText() == "Available") available++;
-    if (Table4_Status->currentText() == "Occupied") occupied++;
-    if (Table4_Status->currentText() == "Reserved") reserved++;
-    updateTableStatus(4, Table4_Status->currentText());
-
-    if (Table5_Status->currentText() == "Available") available++;
-    if (Table5_Status->currentText() == "Occupied") occupied++;
-    if (Table5_Status->currentText() == "Reserved") reserved++;
-    updateTableStatus(5, Table5_Status->currentText());
-
-    if (Table6_Status->currentText() == "Available") available++;
-    if (Table6_Status->currentText() == "Occupied") occupied++;
-    if (Table6_Status->currentText() == "Reserved") reserved++;
-    updateTableStatus(6, Table6_Status->currentText());
-
-    // Update the line edits with the new counts
-    availableCount->setText(QString::number(available));
-    occupiedCount->setText(QString::number(occupied));
-    reservedCount->setText(QString::number(reserved));
-
-}
-
 void MainWindow::on_AdditemBtn_clicked()
 {
     // Get references to your input fields
@@ -756,8 +713,31 @@ void MainWindow::on_AdditemBtn_clicked()
     
     // Check if the fields are not empty
     if (!itemName->text().isEmpty() && !price->text().isEmpty()) {
+        // Convert price to float
+        bool ok;
+        float priceValue = price->text().toFloat(&ok);
+        if (!ok || priceValue <= 0) {
+            QMessageBox::warning(nullptr, "Input Error", "Please enter a valid price");
+            return;
+        }
+
+        // Insert into database
+        QSqlQuery query(db);
+        query.prepare("INSERT INTO Menu (food_name, food_price) VALUES (:name, :price)");
+        query.bindValue(":name", itemName->text());
+        query.bindValue(":price", priceValue);
+
+        if (!query.exec()) {
+            QMessageBox::critical(nullptr, "Database Error", 
+                QString("Failed to add menu item: %1").arg(query.lastError().text()));
+            return;
+        }
+
         // Create a new menu item card
         createMenuItemCard(itemName->text(), "", price->text());
+        
+        // Update the food items combo box
+        initializeFoodItems();
         
         // Clear the input fields
         itemName->clear();
@@ -800,33 +780,52 @@ void MainWindow::on_pushButton_4_clicked()
     this->close();
 }
 
-// Add these methods to handle window dragging
-// void MainWindow::mousePressEvent(QMouseEvent* event)
-// {
-//     if (event->button() == Qt::LeftButton) {
-//         // Check if the click position is in the header area
-//         if (event->pos().y() < 50) {
-//             dragPosition = event->globalPosition().toPoint() - frameGeometry().topLeft();
-//             event->accept();
-//         }
-//     }
-// }
 
-// void MainWindow::mouseMoveEvent(QMouseEvent* event)
-// {
-//     if (event->buttons() & Qt::LeftButton) {
-//         // Only move if the drag started in the header area
-//         if (!dragPosition.isNull()) {
-//             move(event->globalPosition().toPoint() - dragPosition);
-//             event->accept();
-//         }
-//     }
-// }
+void MainWindow::on_deleteButton_clicked()
+{
 
-// void MainWindow::mouseReleaseEvent(QMouseEvent* event)
-// {
-//     // Reset dragPosition when mouse is released
-//     dragPosition = QPoint();
-//     event->accept();
-// }
+}
+
+void MainWindow::initializeInventory() {
+    QSqlQuery query(db);
+    QTableWidget* table = ui->inventoryTable;
+    
+    // Clear existing items
+    table->setRowCount(0);
+    
+    if (query.exec("SELECT item_name, category, quantity, status FROM Inventory ORDER BY item_name")) {
+        while (query.next()) {
+            int row = table->rowCount();
+            table->insertRow(row);
+            
+            // Add items to the table
+            table->setItem(row, 0, new QTableWidgetItem(query.value(0).toString())); // Item Name
+            table->setItem(row, 1, new QTableWidgetItem(query.value(1).toString())); // Category
+            table->setItem(row, 2, new QTableWidgetItem(query.value(2).toString())); // Quantity
+            table->setItem(row, 3, new QTableWidgetItem(query.value(3).toString())); // Status
+        }
+    } else {
+        QMessageBox::warning(nullptr, "Database Warning", 
+            QString("Failed to load inventory: %1").arg(query.lastError().text()));
+    }
+}
+
+void MainWindow::initializeFoodItems() {
+    QComboBox* foodItemSelect = ui->FoodItemSelect;
+    foodItemSelect->clear();  // Clear existing items
+    
+    QSqlQuery query(db);
+    if (query.exec("SELECT food_name, food_price FROM Menu ORDER BY food_name")) {
+        while (query.next()) {
+            QString foodName = query.value(0).toString();
+            float price = query.value(1).toFloat();
+            
+            // Add item with name and price
+            foodItemSelect->addItem(QString("%1 - $%2").arg(foodName).arg(price, 0, 'f', 2));
+        }
+    } else {
+        QMessageBox::warning(nullptr, "Database Warning", 
+            QString("Failed to load menu items: %1").arg(query.lastError().text()));
+    }
+}
 
