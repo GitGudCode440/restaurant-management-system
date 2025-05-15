@@ -65,6 +65,8 @@ MainWindow::MainWindow(QWidget *parent)
                 on_tableStatusChanged(tableId, newStatus);
             }
         );
+
+        combo->setAttribute(Qt::WA_TransparentForMouseEvents, true);
     }
 
     // Load initial data
