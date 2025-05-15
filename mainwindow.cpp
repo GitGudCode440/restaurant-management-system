@@ -633,7 +633,6 @@ void MainWindow::loadMenuItems()
 
 void MainWindow::on_tableWidget_tables_itemDoubleClicked(QTableWidgetItem *item)
 {
-    // Get the row of the double-clicked item
     int row = item->row();
     
     // Get the table number from the second column (index 1)
@@ -642,8 +641,7 @@ void MainWindow::on_tableWidget_tables_itemDoubleClicked(QTableWidgetItem *item)
 
     // Get the reservation details for deletion
     QString customerName = ui->tableWidget_tables->item(row, 0)->text();
-    QDate date = QDate::fromString(ui->tableWidget_tables->item(row, 2)->text(), "yyyy-MM-dd");
-    QTime time = QTime::fromString(ui->tableWidget_tables->item(row, 3)->text(), "hh:mm");
+
 
     // Confirm deletion with the user
     QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Deletion",
@@ -654,20 +652,16 @@ void MainWindow::on_tableWidget_tables_itemDoubleClicked(QTableWidgetItem *item)
         return;
     }
 
-    // Delete from database
     QSqlQuery deleteQuery(db);
-    deleteQuery.prepare("DELETE FROM Reservations WHERE customer_name = ? AND table_id = ? AND reservation_date = ? AND reservation_time = ?");
+    deleteQuery.prepare("DELETE FROM Reservations WHERE customer_name = ? AND table_id = ?;");
     deleteQuery.addBindValue(customerName);
     deleteQuery.addBindValue(tableId);
-    deleteQuery.addBindValue(date);
-    deleteQuery.addBindValue(time);
 
     if (!deleteQuery.exec()) {
         QMessageBox::critical(this, "Error", "Failed to delete reservation from database: " + deleteQuery.lastError().text());
         return;
     }
 
-    // Update the table status to Available in the database
     QSqlQuery query(db);
     query.prepare("UPDATE Tables SET status = 'Available' WHERE table_id = ?");
     query.addBindValue(tableId);
@@ -792,17 +786,61 @@ void MainWindow::initializeInventory() {
     
     // Clear existing items
     table->setRowCount(0);
+
+    QSpinBox* comboBox = new QSpinBox();
+    comboBox->setMaximum(99999);
+    comboBox->setStyleSheet("QComboBox { color: black; }");
+
     
     if (query.exec("SELECT item_name, category, quantity, status FROM Inventory ORDER BY item_name")) {
         while (query.next()) {
             int row = table->rowCount();
             table->insertRow(row);
+
+            QString itemName = query.value(0).toString();
+            QString category = query.value(1).toString();
+            int comboValue = query.value(2).toInt();
+            QString status = query.value(3).toString();
+
+            QSpinBox* spinBox = new QSpinBox(table);
+            spinBox->setStyleSheet("QSpinBox { color: black; background-color: white; }");
+            spinBox->setRange(0, 1000);
+            spinBox->setValue(comboValue);
+            spinBox->setAlignment(Qt::AlignCenter);
+
+            QTableWidgetItem* statusItem = new QTableWidgetItem(status);
+
+
+            
+            connect(spinBox, &QSpinBox::valueChanged, this, [itemName, statusItem](int value) {
+                if (value > 0) {
+                    statusItem->setText("In Stock");
+                    QSqlQuery q("UPDATE Inventory SET status = ? WHERE item_name = ?;");
+                    q.addBindValue("In Stock"); q.addBindValue(itemName);
+                    q.exec();
+                }
+                else {
+                    statusItem->setText("Out of Stock");
+                    QSqlQuery q("UPDATE Inventory SET status = ? WHERE item_name = ?;");
+                    q.addBindValue("Out of Stock"); q.addBindValue(itemName);
+                    q.exec();
+                }
+
+                QSqlQuery q("UPDATE Inventory SET quantity = ? WHERE item_name = ?;");
+                q.addBindValue(value);
+                q.addBindValue(itemName);
+
+                if (!q.exec()) {
+                    QMessageBox::warning(nullptr, "Database Warning", QString("Failed to change quantity: %1").arg(q.lastError().text()));
+                }
+            });
+
             
             // Add items to the table
-            table->setItem(row, 0, new QTableWidgetItem(query.value(0).toString())); // Item Name
-            table->setItem(row, 1, new QTableWidgetItem(query.value(1).toString())); // Category
-            table->setItem(row, 2, new QTableWidgetItem(query.value(2).toString())); // Quantity
-            table->setItem(row, 3, new QTableWidgetItem(query.value(3).toString())); // Status
+            table->setItem(row, 0, new QTableWidgetItem(itemName)); // Item Name
+            table->setItem(row, 1, new QTableWidgetItem(category)); // Category
+            table->setCellWidget(row, 2, spinBox); // Quantity
+            table->setItem(row, 3, statusItem); // Status
         }
     } else {
         QMessageBox::warning(nullptr, "Database Warning", 
