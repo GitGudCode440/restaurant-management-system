@@ -47,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
     if (!db.open()) {
         QMessageBox::critical(this, "Database Error", 
             QString("Unable to connect to database: %1").arg(db.lastError().text()));
-        return;
+
     }
     qDebug() << "Database connection successful";
 
@@ -55,9 +55,8 @@ MainWindow::MainWindow(QWidget *parent)
     qDebug() << "Setting up combo box connections";
     QList<QComboBox*> combos = ui->TableGrid->findChildren<QComboBox*>();
     for(QComboBox* combo : std::as_const(combos)) {
-        // Extract table ID from combo box name (e.g., "Table1_Status" -> 1)
         QString name = combo->objectName();
-        int tableId = name.mid(5, 1).toInt();  // Extract the number after "Table"
+        int tableId = name.mid(5, 1).toInt();
         
         connect(combo, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
             [this, combo, tableId](int index) {
@@ -629,7 +628,7 @@ void MainWindow::loadMenuItems()
         ui->FoodItemSelect->addItem(QString("%1 - $%2").arg(foodName).arg(price, 0, 'f', 2));
         
         // Create and add menu item card
-        createMenuItemCard(foodName, "", QString::number(price, 'f', 2));
+        createMenuItemCard(foodName, QString::number(price, 'f', 2));
     }
 }
 
@@ -730,7 +729,8 @@ void MainWindow::on_AdditemBtn_clicked()
         }
 
         // Create a new menu item card
-        createMenuItemCard(itemName->text(), "", price->text());
+        MenuItemCard* card = createMenuItemCard(itemName->text(), price->text());
+        connect(card, &MenuItemCard::initializeFoodItemsInBillingPage, this, &MainWindow::initializeFoodItems);
         
         // Update the food items combo box
         initializeFoodItems();
@@ -744,13 +744,15 @@ void MainWindow::on_AdditemBtn_clicked()
     }
 }
 
-void MainWindow::createMenuItemCard(const QString& name, const QString& description, const QString& price)
+MenuItemCard* MainWindow::createMenuItemCard(const QString& name, const QString& price)
 {
     // Create a new menu item card widget
-    MenuItemCard* card = new MenuItemCard(name, description, price, this);
+    MenuItemCard* card = new MenuItemCard(name, price, this);
     
     // Add the card to the menu items layout
     ui->menuItemsLayout->addWidget(card);
+
+    return card;
 }
 
 // Window control buttons implementation

@@ -1,6 +1,6 @@
 #include "menuitemcard.h"
 
-MenuItemCard::MenuItemCard(const QString &name, const QString &description, const QString &price, QWidget *parent)
+MenuItemCard::MenuItemCard(const QString &name, const QString &price, QWidget *parent)
     : QWidget(parent)
 {
     // Create the main layout
@@ -18,6 +18,7 @@ MenuItemCard::MenuItemCard(const QString &name, const QString &description, cons
         "   padding: 5px;"
         "}"
     );
+    cardFrame->setCursor(Qt::CursorShape::PointingHandCursor);
     
     // Create a layout for the card content
     QHBoxLayout *cardLayout = new QHBoxLayout(cardFrame);
@@ -55,6 +56,28 @@ MenuItemCard::MenuItemCard(const QString &name, const QString &description, cons
     // Add card frame to main layout
     mainLayout->addWidget(cardFrame);
     setLayout(mainLayout);
+}
+
+void MenuItemCard::mouseDoubleClickEvent(QMouseEvent* event) {
+    if (event->button() == Qt::LeftButton) {
+
+        QMessageBox::StandardButton reply = QMessageBox::question(nullptr, "Confirm Deletion",
+            "Are you sure you want to delete this menu item?", QMessageBox::Yes | QMessageBox::No);
+
+        if (reply != QMessageBox::Yes) return;
+
+        QSqlQuery q("DELETE FROM Menu WHERE food_name = ? AND food_price = ?");
+        std::cout << "Hello! It workds" << std::endl;
+        q.addBindValue(nameLabel->text());
+        q.addBindValue(priceLabel->text());
+        if (!q.exec()) {
+            QMessageBox::critical(nullptr, "Database Error", QString("Failed to delete menu item: %1").arg(q.lastError().text()));
+            return;
+        }
+    }
+
+    emit initializeFoodItemsInBillingPage();
+    delete this;
 }
 
 MenuItemCard::~MenuItemCard()

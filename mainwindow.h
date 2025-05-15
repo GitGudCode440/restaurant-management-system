@@ -6,6 +6,7 @@
 #include <QUuid>
 #include <QDateTime>
 #include "ordercard.h"
+#include "menuitemcard.h"
 #include <QComboBox>
 #include <QList>
 #include <QMouseEvent>
@@ -54,6 +55,8 @@ private slots:
     void on_AdditemBtn_clicked();
     void on_btn_reserve_clicked();
     void on_tableStatusChanged(int tableId, const QString& newStatus);
+    void initializeFoodItems();
+
     
     // Window control buttons
     void on_pushButton_2_clicked(); // Minimize
@@ -74,13 +77,12 @@ private:
     void updateTableStatus(int tableId, const QString& status);
 
     void addOrder(OrderCard* card, int id = -1);
-    void createMenuItemCard(const QString& name, const QString& description, const QString& price);
+    MenuItemCard* createMenuItemCard(const QString& name, const QString& price);
 
     void initializeOrders();
     void initializeReservations();
     void initializeTables();
     void initializeInventory();
-    void initializeFoodItems();
 
     int currentRow = 0;
     int orderCount = 0;

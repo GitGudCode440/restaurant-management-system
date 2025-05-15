@@ -139,7 +139,7 @@ QPushButton:pressed {
          <pixmap resource="resource.qrc">:/images/images/Welcome.png</pixmap>
         </property>
         <property name="scaledContents">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="alignment">
          <set>Qt::AlignmentFlag::AlignCenter</set>
