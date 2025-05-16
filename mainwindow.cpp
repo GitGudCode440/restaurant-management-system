@@ -467,27 +467,30 @@ void MainWindow::on_addButton_clicked()
         return;
     }
 
-    // Convert quantity to price (assuming quantityEdit is being used for price)
+    // Convert quantity to integer
     bool ok;
-    float price = quantityEdit->text().toFloat(&ok);
-    if (!ok || price <= 0) {
-        QMessageBox::warning(nullptr, "Input Error", "Please enter a valid price");
+    int quantity = quantityEdit->text().toInt(&ok);
+    if (!ok || quantity < 0) {
+        QMessageBox::warning(nullptr, "Input Error", "Please enter a valid quantity");
         return;
     }
+
+    // Determine status based on quantity
+    QString status = (quantity > 0) ? "In Stock" : "Out of Stock";
 
     // Insert into database
     QSqlQuery query(db);
     query.prepare("INSERT INTO Inventory (item_name, category, quantity, status) "
-                 "VALUES (:name, :category, :price, :status)");
+                 "VALUES (:name, :category, :quantity, :status)");
     
     query.bindValue(":name", itemNameEdit->text());
     query.bindValue(":category", categoryEdit->text());
-    query.bindValue(":price", price);
-    query.bindValue(":status", statusCombo->currentText());  // Using statusCombo for description
+    query.bindValue(":quantity", quantity);
+    query.bindValue(":status", status);
 
     if (!query.exec()) {
         QMessageBox::critical(nullptr, "Database Error", 
-            QString("Failed to add menu item: %1").arg(query.lastError().text()));
+            QString("Failed to add inventory item: %1").arg(query.lastError().text()));
         return;
     }
 
@@ -495,25 +498,52 @@ void MainWindow::on_addButton_clicked()
     int currentRow = table->rowCount();
     table->insertRow(currentRow);
 
-    QTableWidgetItem* tableItem;
-    for (int i = 0; i < 4; i++) {
-        switch(i) {
-        case 0: tableItem = new QTableWidgetItem(itemNameEdit->text()); break;
-        case 1: tableItem = new QTableWidgetItem(categoryEdit->text()); break;
-        case 2: tableItem = new QTableWidgetItem(QString::number(price, 'f', 2)); break;
-        case 3: tableItem = new QTableWidgetItem(statusCombo->currentText()); break;
+    // Create spinBox for quantity
+    QSpinBox* spinBox = new QSpinBox(table);
+    spinBox->setStyleSheet("QSpinBox { color: black; background-color: white; }");
+    spinBox->setRange(0, 99999);
+    spinBox->setValue(quantity);
+    spinBox->setAlignment(Qt::AlignCenter);
+
+    // Create status item
+    QTableWidgetItem* statusItem = new QTableWidgetItem(status);
+
+    // Connect spinBox value changes to update status
+    QString itemName = itemNameEdit->text();
+    connect(spinBox, &QSpinBox::valueChanged, this, [itemName, statusItem](int value) {
+        if (value > 0) {
+            statusItem->setText("In Stock");
+            QSqlQuery q("UPDATE Inventory SET status = ? WHERE item_name = ?;");
+            q.addBindValue("In Stock"); q.addBindValue(itemName);
+            q.exec();
         }
-        table->setItem(currentRow, i, tableItem);
-    }
+        else {
+            statusItem->setText("Out of Stock");
+            QSqlQuery q("UPDATE Inventory SET status = ? WHERE item_name = ?;");
+            q.addBindValue("Out of Stock"); q.addBindValue(itemName);
+            q.exec();
+        }
+
+        QSqlQuery q("UPDATE Inventory SET quantity = ? WHERE item_name = ?;");
+        q.addBindValue(value);
+        q.addBindValue(itemName);
+
+        if (!q.exec()) {
+            QMessageBox::warning(nullptr, "Database Warning", QString("Failed to change quantity: %1").arg(q.lastError().text()));
+        }
+    });
+
+    // Add items to the table
+    table->setItem(currentRow, 0, new QTableWidgetItem(itemName)); // Item Name
+    table->setItem(currentRow, 1, new QTableWidgetItem(categoryEdit->text())); // Category
+    table->setCellWidget(currentRow, 2, spinBox); // Quantity
+    table->setItem(currentRow, 3, statusItem); // Status
 
     // Clear input fields
     itemNameEdit->clear();
     categoryEdit->clear();
     quantityEdit->clear();
     statusCombo->setCurrentIndex(0);
-
-    // Reload menu items
-    loadMenuItems();
 }
 
 void MainWindow::initializeTables() {
@@ -632,74 +662,6 @@ void MainWindow::loadMenuItems()
     }
 }
 
-void MainWindow::on_tableWidget_tables_itemDoubleClicked(QTableWidgetItem *item)
-{
-    int row = item->row();
-    
-    // Get the table number from the second column (index 1)
-    QString tableText = ui->tableWidget_tables->item(row, 1)->text();
-    int tableId = tableText.split(" ").last().toInt();
-
-    // Get the reservation details for deletion
-    QString customerName = ui->tableWidget_tables->item(row, 0)->text();
-
-
-    // Confirm deletion with the user
-    QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Deletion",
-        "Are you sure you want to delete this reservation?",
-        QMessageBox::Yes | QMessageBox::No);
-
-    if (reply != QMessageBox::Yes) {
-        return;
-    }
-
-    QSqlQuery deleteQuery(db);
-    deleteQuery.prepare("DELETE FROM Reservations WHERE customer_name = ? AND table_id = ?;");
-    deleteQuery.addBindValue(customerName);
-    deleteQuery.addBindValue(tableId);
-
-    if (!deleteQuery.exec()) {
-        QMessageBox::critical(this, "Error", "Failed to delete reservation from database: " + deleteQuery.lastError().text());
-        return;
-    }
-
-    QSqlQuery query(db);
-    query.prepare("UPDATE Tables SET status = 'Available' WHERE table_id = ?");
-    query.addBindValue(tableId);
-    
-    if (!query.exec()) {
-        QMessageBox::critical(this, "Error", "Failed to update table status: " + query.lastError().text());
-        return;
-    }
-
-    // Update the UI table status
-    QComboBox* tableStatusCombo = nullptr;
-    switch (tableId) {
-        case 1: tableStatusCombo = Table1_Status; break;
-        case 2: tableStatusCombo = Table2_Status; break;
-        case 3: tableStatusCombo = Table3_Status; break;
-        case 4: tableStatusCombo = Table4_Status; break;
-        case 5: tableStatusCombo = Table5_Status; break;
-        case 6: tableStatusCombo = Table6_Status; break;
-    }
-
-    if (tableStatusCombo) {
-        int index = tableStatusCombo->findText("Available");
-        if (index >= 0) {
-            tableStatusCombo->setCurrentIndex(index);
-            setComboBoxColor(tableStatusCombo, "Available");
-        }
-    }
-
-    // Remove the row from the reservations table
-    ui->tableWidget_tables->removeRow(row);
-
-    // Update table status counts
-    updateTableStatusCounts();
-
-    QMessageBox::information(this, "Success", "Reservation deleted successfully");
-}
-
 void MainWindow::on_AdditemBtn_clicked()
 {
     // Get references to your input fields
@@ -781,7 +743,36 @@ void MainWindow::on_pushButton_4_clicked()
 
 void MainWindow::on_deleteButton_clicked()
 {
+    QTableWidget* table = ui->inventoryTable;
+    int row = table->currentRow();
 
+    if (row < 0) {
+        QMessageBox::warning(this, "Input Error", "Please select a record to be deleted");
+        return;
+    }
+
+    QString itemName = table->item(row, 0)->text();
+
+    QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Deletion",
+        "Are you sure you want to delete this inventory item?",
+        QMessageBox::Yes | QMessageBox::No);
+
+    if (reply != QMessageBox::Yes) return;
+
+    QSqlQuery query(db);
+    query.prepare("DELETE FROM Inventory WHERE item_name = ?");
+    query.addBindValue(itemName);
+
+    if (!query.exec()) {
+        QMessageBox::critical(this, "Database Error", 
+            QString("Failed to delete inventory item: %1").arg(query.lastError().text()));
+        return;
+    }
+
+    // Remove the row from the table
+    table->removeRow(row);
+
+    QMessageBox::information(this, "Success", "Inventory item deleted successfully");
 }
 
 void MainWindow::initializeInventory() {
@@ -869,5 +860,74 @@ void MainWindow::initializeFoodItems() {
         QMessageBox::warning(nullptr, "Database Warning", 
             QString("Failed to load menu items: %1").arg(query.lastError().text()));
     }
+}
+
+
+void MainWindow::on_reservation_btn_delete_clicked()
+{
+    QTableWidget* table = ui->tableWidget_tables;
+    int row = table->currentRow();
+    QString tableText = ui->tableWidget_tables->item(row, 1)->text();
+    int tableId = tableText.split(" ").last().toInt();
+
+    QString customerName = ui->tableWidget_tables->item(row, 0)->text();
+
+    if (row < 0) {
+        QMessageBox::warning(nullptr, "Input Error", "Please select a record to be deleted");
+        return;
+    }
+
+    QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Deletion",
+                                                              "Are you sure you want to delete this reservation?",
+                                                              QMessageBox::Yes | QMessageBox::No);
+
+
+    if (reply != QMessageBox::Yes) return;
+
+    QSqlQuery deleteQuery(db);
+    deleteQuery.prepare("DELETE FROM Reservations WHERE customer_name = ? AND table_id = ?;");
+    deleteQuery.addBindValue(customerName);
+    deleteQuery.addBindValue(tableId);
+
+    if (!deleteQuery.exec()) {
+        QMessageBox::critical(this, "Error", "Failed to delete reservation from database: " + deleteQuery.lastError().text());
+        return;
+    }
+
+    QSqlQuery query(db);
+    query.prepare("UPDATE Tables SET status = 'Available' WHERE table_id = ?");
+    query.addBindValue(tableId);
+
+    if (!query.exec()) {
+        QMessageBox::critical(this, "Error", "Failed to update table status: " + query.lastError().text());
+        return;
+    }
+
+    // Update the UI table status
+    QComboBox* tableStatusCombo = nullptr;
+    switch (tableId) {
+    case 1: tableStatusCombo = Table1_Status; break;
+    case 2: tableStatusCombo = Table2_Status; break;
+    case 3: tableStatusCombo = Table3_Status; break;
+    case 4: tableStatusCombo = Table4_Status; break;
+    case 5: tableStatusCombo = Table5_Status; break;
+    case 6: tableStatusCombo = Table6_Status; break;
+    }
+
+    if (tableStatusCombo) {
+        int index = tableStatusCombo->findText("Available");
+        if (index >= 0) {
+            tableStatusCombo->setCurrentIndex(index);
+            setComboBoxColor(tableStatusCombo, "Available");
+        }
+    }
+
+    // Remove the row from the reservations table
+    ui->tableWidget_tables->removeRow(row);
+
+    // Update table status counts
+    updateTableStatusCounts();
+
+    QMessageBox::information(this, "Success", "Reservation deleted successfully");
 }
 

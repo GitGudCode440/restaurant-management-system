@@ -716,7 +716,7 @@ QComboBox QAbstractItemView {
        <item>
         <widget class="QStackedWidget" name="NavigationTabs">
          <property name="currentIndex">
-          <number>0</number>
+          <number>5</number>
          </property>
          <widget class="QWidget" name="Tables">
           <property name="styleSheet">
@@ -2984,6 +2984,9 @@ QHeaderView::section {
              <property name="selectionMode">
               <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
              </property>
+             <property name="selectionBehavior">
+              <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+             </property>
              <attribute name="horizontalHeaderMinimumSectionSize">
               <number>100</number>
              </attribute>
@@ -3063,7 +3066,7 @@ QHeaderView::section {
                </item>
                <item>
                 <property name="text">
-                 <string>Low Stock</string>
+                 <string>Out of Stock</string>
                 </property>
                </item>
               </widget>

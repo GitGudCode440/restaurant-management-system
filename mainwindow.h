@@ -65,9 +65,9 @@ private slots:
     
     void loadMenuItems();
 
-    void on_tableWidget_tables_itemDoubleClicked(QTableWidgetItem *item);
-
     void on_deleteButton_clicked();
+
+    void on_reservation_btn_delete_clicked();
 
 private:
     Ui::MainWindow *ui;
