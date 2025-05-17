@@ -47,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
     if (!db.open()) {
         QMessageBox::critical(this, "Database Error", 
             QString("Unable to connect to database: %1").arg(db.lastError().text()));
-
+        return;
     }
     qDebug() << "Database connection successful";
 
@@ -510,7 +510,7 @@ void MainWindow::on_addButton_clicked()
 
     // Connect spinBox value changes to update status
     QString itemName = itemNameEdit->text();
-    connect(spinBox, &QSpinBox::valueChanged, this, [itemName, statusItem](int value) {
+    connect(spinBox, QOverload<&QSpinBox::valueChanged, this, [itemName, statusItem](int value) {
         if (value > 0) {
             statusItem->setText("In Stock");
             QSqlQuery q("UPDATE Inventory SET status = ? WHERE item_name = ?;");
@@ -807,7 +807,7 @@ void MainWindow::initializeInventory() {
 
 
             
-            connect(spinBox, &QSpinBox::valueChanged, this, [itemName, statusItem](int value) {
+            connect(spinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, [itemName, statusItem](int value) {
                 if (value > 0) {
                     statusItem->setText("In Stock");
                     QSqlQuery q("UPDATE Inventory SET status = ? WHERE item_name = ?;");
