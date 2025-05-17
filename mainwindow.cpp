@@ -510,7 +510,7 @@ void MainWindow::on_addButton_clicked()
 
     // Connect spinBox value changes to update status
     QString itemName = itemNameEdit->text();
-    connect(spinBox, QOverload<&QSpinBox::valueChanged, this, [itemName, statusItem](int value) {
+    connect(spinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, [itemName, statusItem](int value) {
         if (value > 0) {
             statusItem->setText("In Stock");
             QSqlQuery q("UPDATE Inventory SET status = ? WHERE item_name = ?;");
