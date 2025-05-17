@@ -1,5 +1,4 @@
 #include "loginpage.h"
-#include "mainwindow.h"
 #include <QApplication>
 #include <iostream>
 #include <QSqlDatabase>
