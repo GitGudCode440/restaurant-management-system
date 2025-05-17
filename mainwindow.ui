@@ -716,7 +716,7 @@ QComboBox QAbstractItemView {
        <item>
         <widget class="QStackedWidget" name="NavigationTabs">
          <property name="currentIndex">
-          <number>5</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="Tables">
           <property name="styleSheet">
@@ -1922,8 +1922,8 @@ QPushButton:pressed {
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>64</width>
-                   <height>147</height>
+                   <width>100</width>
+                   <height>30</height>
                   </rect>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_24">

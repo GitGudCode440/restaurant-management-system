@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Welcome!</string>
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget {
