@@ -99,6 +99,17 @@ CREATE TABLE `Tables` (
   `status` varchar(20) NOT NULL,
   PRIMARY KEY (`table_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+
+INSERT INTO `Tables` (`table_id`, `status`)
+VALUES
+  (1, 'Available'),
+  (2, 'Available'),
+  (3, 'Available'),
+  (4, 'Available'),
+  (5, 'Available'),
+  (6, 'Available');
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
